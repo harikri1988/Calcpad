@@ -1,0 +1,256 @@
+#local
+#include ./AB Style V0.cpd
+#global
+#hide
+#show
+Heading4$(Geometry And Terrain)
+'Reference Height,'z = ? {5.5}m
+'<h5> Terrain Category </h5>
+'Lag distance, 'x_i = 20*z'[Terrain within this distance shall be ignored]
+'Averaging distance, 'x_a = max(500m; 40*z)'<em>[Distance beyond lag distance within which Terrain is to be estimated]</em>
+#pre
+#input
+'<p>Do you want to Estimate Terrain Factor in Detail?: 
+'<input name="TC_Choice" type="radio" id="TC_ChoiceYes" value="1"/>
+'<label for="TC_ChoiceYes">Yes</label>
+'<input name="TC_Choice" type="radio" id="TC_ChoiceNo" value="0"/>
+'<label for="TC_ChoiceNo">No</label>
+'<p id="TC_Choice">Value -'DetailedTC = ? {0}'</p>
+#if DetailedTC
+	TC = [? {3}; ? {3}; ? {3}; ? {2.5}; ? {2}; ? {3}; ? {3}; ? {3}]
+#else
+	'Critical terrain Category,'TC_critical = ? {2}
+	#hide
+	TC = vector(8)
+	#for i = 1 : 8
+		TC.i = TC_critical
+	#loop
+	#show
+	'Terrain Category,'TC
+#end if
+#show
+R_ULS = ? {500}'years and 'R_SLS = ? {25}'years
+#show
+V_R,U = round(67 - 41*R_ULS^-0.1)*m/s
+V_R,S = round(67 - 41*R_SLS^-0.1)*m/s
+#show
+#varsub
+'Reference wind speed, 'V_R,U';'V_R,S
+#hide
+"Estimation of M_z,cat based on Table 4.1 of NZS 1170.2"
+Tab4_1_1170_2_2011 = [ _
+0m; 0.99; 0.91; 0.83; 0.75| _
+3m; 0.991; 0.91; 0.83; 0.75| _
+5m; 1.05; 0.91; 0.83; 0.75| _
+10m; 1.12; 1.00; 0.83; 0.75| _
+15m; 1.16; 1.05; 0.89; 0.75| _
+20m; 1.19; 1.08; 0.94; 0.75| _
+30m; 1.22; 1.12; 1.00; 0.80| _
+40m; 1.24; 1.16; 1.04; 0.85| _
+50m; 1.25; 1.18; 1.07; 0.90| _
+75m; 1.27; 1.22; 1.12; 0.98| _
+100m; 1.29; 1.24; 1.16; 1.03| _
+150m; 1.31; 1.27; 1.21; 1.11| _
+200m; 1.32; 1.29; 1.24; 1.16 _
+]
+
+Interpolate(x; x1; y1; x2; y2) = y1 + (y2 - y1)/(x2 - x1)*(x - x1)
+x_l,wind(z) = last(vlookup_le(Tab4_1_1170_2_2011; z; 1; 1); 1)
+y_1l,wind(z; TC) = last(vlookup_le(Tab4_1_1170_2_2011; z; 1; floor(TC + 1)); 1)
+x_g,wind(z) = first(vlookup_ge(Tab4_1_1170_2_2011; z; 1; 1); 1)
+y_1g,wind(z; TC) = first(vlookup_ge(Tab4_1_1170_2_2011; z; 1; floor(TC + 1)); 1)
+y_2l,wind(z; TC) = last(vlookup_le(Tab4_1_1170_2_2011; z; 1; ceiling(TC + 1)); 1)
+y_2g,wind(z; TC) = first(vlookup_ge(Tab4_1_1170_2_2011; z; 1; ceiling(TC + 1)); 1)
+
+y_l,wind(z; TC) = Interpolate(z; x_l,wind(z); y_1l,wind(z; TC); x_g,wind(z); y_1g,wind(z; TC))
+y_g,wind(z; TC) = Interpolate(z; x_l,wind(z); y_2l,wind(z; TC); x_g,wind(z); y_2g,wind(z; TC))
+M_z,cat_Tab_4_1(z; TC) = (y_l,wind(z; TC) + y_g,wind(z; TC))/2
+
+
+
+
+
+
+
+
+#show
+'<hr>
+Heading4$(Terrain/Height Factor)
+#hide
+M_z,cat = vector(8)
+#for i = 1 : 8
+	a = M_z,cat_Tab_4_1(z; TC.i)
+	M_z,cat.i = a.1
+#loop
+#show
+'<em>''For [N; NE; E; SE; S; SW; W; NW]</em>'
+'EqnWithRef$(Terrain/Height Multiplier,'M_z,cat; Table 4.1, NZS 1170.2)
+#hide
+
+
+
+#show
+'<hr>
+Heading4$(Direction Factors)
+#hide
+M_d,all = [0.90; 0.80; 0.85; 0.90; 1.00; 0.85; 0.90; 1.00|0.80; 0.80; 0.80; 0.85; 0.85; 0.95; 0.90; 0.95|0.80; 0.80; 0.80; 0.90; 0.80; 1.00; 0.80; 0.80|0.80; 0.95; 0.80; 0.90; 0.80; 0.95; 0.90; 0.90|0.85; 0.90; 0.80; 0.95; 0.85; 0.85; 0.90; 1.00|0.95; 0.95; 0.85; 0.95; 0.90; 0.95; 0.90; 1.00|1.00; 1.00; 0.90; 0.95; 1.00; 1.00; 1.00; 0.90|0.95; 0.95; 1.00; 0.90; 0.95; 0.95; 1.00; 0.95]
+#show
+'Select Wind Region: <select name="WindRegion">
+'<option value="1">A1</option>
+'<option value="2">A2</option>
+'<option value="3">A3</option>
+'<option value="4">A4</option>
+'<option value="5">A5</option>
+'<option value="6">A6</option>
+'<option value="7">A7</option>
+'<option value="8">W</option>
+'</select>
+'<p id="WindRegion"> Values:'WindRegion = ? {3}'</p>
+#hide
+M_d = col(M_d,all; WindRegion)
+#post
+'<em>''For [N; NE; E; SE; S; SW; W; NW]</em>
+'EqnWithRef$(Wind direction factors,'M_d; Table 3.2, NZS 1170.2)
+#hide
+
+
+
+
+
+
+#show
+'<hr>
+Heading4$(Topography Factor)
+#pre
+'<p>Do you want to Estimate Terrain Factor in Detail?: 
+'<input name="Mt_Choice" type="radio" id="Mt_ChoiceYes" value="1"/>
+'<label for="Mt_ChoiceYes">Yes</label>
+'<input name="Mt_Choice" type="radio" id="Mt_ChoiceNo" value="0"/>
+'<label for="Mt_ChoiceNo">No</label>
+'<p id="Mt_Choice">Value -'DetailedMt = ? {0}'</p>
+#if DetailedMt
+	#split
+	'<em>''For [N; NE; E; SE; S; SW; W; NW]</em>
+	'Elevation on top of hill in each direction,'Ele_top = [? {81}*m; ? {81}*m; ? {81}*m; ? {81}*m; ? {81}*m; ? {81}*m; ? {81}*m; ? {81}*m]
+	'Elevation of base of hill,'Ele_base = [? {21}*m; ? {21}*m; ? {21}*m; ? {21}*m; ? {21}*m; ? {21}*m; ? {21}*m; ? {21}*m]
+	'Height of hill,'H_hill = Ele_top - Ele_base
+	'Horizontal distance upwind from the crest of the hill, to a level half the height below the crest <em>[i.e., 'Ele_top - H_hill/2' height]</em>,'
+	L_u = [? {210}*m; ? {210}*m; ? {210}*m; ? {210}*m; ? {210}*m; ? {210}*m; ? {210}*m; ? {210}*m]
+	'Horizontal distance upwind or downwind of the structure to the crest of the hill,'x = [? {21}*m; ? {21}*m; ? {21}*m; ? {21}*m; ? {21}*m; ? {21}*m; ? {21}*m; ? {21}*m]
+	'<hr>
+	#hide
+	L_1 = vector(8)';'L_2 = vector(8)';'
+	#for i = 1 : 8
+		L_1.i = max(0.36*L_u.i; 0.4*H_hill.i)
+		L_2.i = 4*L_1.i
+	#loop
+	#post
+	'EqnWithRef$('L_1;Sec.4.4.2, NZS 1170.2)
+	'EqnWithRef$('L_2;Sec.4.4.2, NZS 1170.2)
+	#hide
+	M_h = vector(8)
+	#hide
+	#wrap
+	#for i = 1 : 8
+		#if H_hill.i/(2*L_u.i) < 0.05
+			M_h.i = 1.0
+		#else if H_hill.i/(2*L_u.i) ≤ 0.45
+			M_h.i = 1 + (H_hill.i/(3.5*(z + L_1.i)))*(1 - abs(x.i)/L_2.i)
+		#else if abs(x.i) ≤ H_hill.i/4
+			M_h.i = 1 + 0.71*(1 - abs(x.i)/L_2.i)
+		#else
+			M_h.i = 1 + (H_hill.i/(3.5*(z + L_1.i)))*(1 - abs(x.i)/L_2.i)
+		#end if
+	#loop
+	#hide
+	L_1,hill(H; Lu) = max(0.36*Lu; 0.4*H)
+	L_2,hill(H; Lu) = 4*L_1,hill(H; Lu)
+	
+	M_hill(H; Lu; x) = if(H/(2*Lu) < 0.05; 1.0; _
+	      if(H/(2*Lu) ≤ 0.45; 1 + (H/(3.5*(z + L_1,hill(H; Lu))))*(1 - abs(x)/L_2,hill(H; Lu)); _
+	          if(abs(x) ≤ H/4; 1 + 0.71*(1 - abs(x)/L_2,hill(H; Lu)); _
+	                       1 + (H_hill/(3.5*(z + L_1,hill(H; Lu))))*(1 - abs(x)/L_2,hill(H; Lu)))))
+	#hide
+	M_t = vector(8)
+	'#show
+	#for i = 1 : 8
+		M_t.i = M_hill(H_hill.i; L_u.i; x.i)
+	#loop
+	#show
+	'EqnWithRef$(Topographic Multiplier,'M_t;Sec.4.4.2, NZS 1170.2)
+	'Maximum of <em><strong>(Md*Mt)</strong></em> ='max(M_d*M_t)
+#else
+	'Critical Topographic Multiplier,'M_t,critical = ? {1.0}
+	#hide
+	M_t = vector(8)
+	#for i = 1 : 8
+		M_t.i = M_t,critical
+	#loop
+	#show
+	'EqnWithRef$(Topographic Multiplier,'M_t;Sec.4.4.2, NZS 1170.2)
+	'Maximum of <em><strong>(Md*Mt)</strong></em> ='max(M_d*M_t)
+#end if
+'<hr>
+#hide
+
+
+
+
+
+
+
+#show
+Heading4$(Shielding Multiplier)
+'EqnWithRef$(Shielding Multiplier, 'M_s = ? {1.0};Table 4.3, NZS 1170.2)
+'<hr>
+#hide
+
+
+
+
+#show
+Heading4$(Design Wind Speed)
+'Key Parameters for estimating site wind speed are:
+'Reference wind speeds,'V_R,U' and 'V_R,S
+'Direction Multipliers are:'M_d
+'Terrain/Height multiplier,'M_z,cat
+'Shielding multiplier,'M_s
+'Topographic multiplier,'M_t
+#split
+#nosub
+'Product of Multipliers:'M_wind = M_d*M_z,cat*M_s*M_t
+#wrap
+#varsub
+'<hr>
+'<em>''For [N; NE; E; SE; S; SW; W; NW]</em>
+V_sit,β,ULS = V_R,U*M_wind
+V_sit,β,SLS = V_R,S*M_wind
+#wrap
+'<hr>
+#hide
+cyclic(a) = join(slice(a; size(a); size(a)); a)
+βtoθ(a; i) = max(slice(cyclic(a); i; i); slice(a; i; i); slice(a; i + 1; i + 1))
+V_des,θ,ULS = vector(8)
+V_des,θ,SLS = vector(8)
+#for i = 1 : 8
+	V_des,θ,ULS.i = βtoθ(V_sit,β,ULS; i)
+	V_des,θ,SLS.i = βtoθ(V_sit,β,SLS; i)
+#loop
+#show
+'<strong>Design Wind Speeds:</strong>'
+V_des,θ,ULS = max(V_des,θ,ULS)
+V_des,θ,SLS = max(V_des,θ,SLS)
+'<hr>
+#hide
+
+
+
+
+
+
+
+#show
+Heading4$(Basic Wind Pressures)
+ρ_air = 1.2kg/m^3
+p_basic,ULS = 0.5*ρ_air*V_des,θ,ULS^2|kPa
+p_basic,SLS = 0.5*ρ_air*V_des,θ,SLS^2|kPa

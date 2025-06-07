@@ -1,0 +1,29 @@
+#post
+'</div>
+'<h4>Flexural Check</h4>
+#hide
+S_1(b; d; L) = if(d < b; 0; 1.35*sqrt(L/b*sqrt((d/b)^2 - 1)))
+k_4(n) = if(n < 2; 1; round((1 - 1.65*0.195*min(10; n)^-0.5)*100/(1 - 1.65*0.195))/100)
+k_8,dry(S) = if(S < 10; 1; if(S ≤ 25; 0.21 + 0.175*S - 0.0116*S^2 + S^3/5000; 235.5*S^-1.937))
+k_8,Green(S) = if(S < 10; 1; if(S ≤ 25; 0.45 + 0.1237*S - 0.0082*S^2 + S^3/7500; 251.4*S^-1.933))
+k_8(IsDry; b; d; L) = if(IsDry; k_8,dry(S_1(b; d; L)); k_8,Green(S_1(b; d; L)))
+#post
+'Load duration factor,'k_1'<span style = "color:gray;"><i>[Table 2.4]</i></Span>
+'Parallel support factor,'k_4t = k_4(n_t)'<span style = "color:gray;"><i>[Table 2.7]</i></Span>
+'Grid system factor,'k_5'<span style = "color:gray;"><i>[Eq(2.5)]</i></Span>
+'Slenderness coefficient, 'S_1(b; d; L_ay)'<span style = "color:gray;"><i>[Eq.(3.5)]</i></Span>
+'Stability factor,'k_8t = k_8(IsDry; b; d; L_ay)'<span style = "color:gray;"><i>[Sec.2.10]</i></Span>
+'Section modulus, 'Z_xx = b*d^2/6|cm^3
+'Allowable stress in bending, 'f_b'<span style = "color:gray;"><i>[Table 2.2]</i></Span>
+'Nominal Bending Capacity: '
+M_n,t = k_1*k_4t*k_5*k_8t*Z_xx*f_b|kN*m'<span style = "color:gray;"><i>[Eq.(3.4)]</i></Span>
+'Strength of element in bending, 'φM_n,t = φ_t*M_n,t'<span style = "color:gray;"><i>[Eq.(3.3)]</i></Span>
+
+'<h4>Shear Check</h4>
+'Load duration factor,'k_1'<span style = "color:gray;"><i>[Table 2.4]</i></Span>
+'Parallel support factor,'k_4t'<span style = "color:gray;"><i>[Table 2.7]</i></Span>
+'Grid system factor, 'k_5'<span style = "color:gray;"><i>[Eq(2.5)]</i></Span>
+'Allowable stress in shear, 'f_s'<span style = "color:gray;"><i>[Table 2.2]</i></Span>
+'Shear plane area, 'A_s = 2/3*b*d|cm^2'<span style = "color:gray;"><i>[Sec. 3.2.3.1]</i></Span>
+'Nominal shear capacity:'V_n,t = k_1*k_4t*k_5*A_s*f_s'<span style = "color:gray;"><i>[Eq.(3.2)]</i></Span>
+'Strength of element in shear,'φV_n,t = φ_t*V_n,t'<span style = "color:gray;"><i>[Eq.(3.1)]</i></Span>

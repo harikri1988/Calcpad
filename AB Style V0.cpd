@@ -1,0 +1,75 @@
+'<style> @page{size:A4; margin-left:0.5cm; margin-right:0.5cm}</style>
+'<style> @media print { html, body{width: 210mm; height:297mm;}</style>
+'<style>body{counter-reset:h1;}h1{counter-increment:h1; counter-reset:h2; background-color: grey;}h1::before{content:counter(h1)". "; } h2{counter-increment:h2; counter-reset:h3; background-color:lightgreen; }h2::before{content:counter(h1)"."counter(h2)" "; } h3{counter-increment:h3; background-color:cyan; }h3::before{content:counter(h1)"."counter(h2)"."counter(h3)" "} </style> 
+'<style>h1{font: 16pt Tahoma; font-weight: bold; background-color:rgba(237,125,49,1);width:200mm;}</style>
+'<style>h2{font: 14pt Tahoma; font-weight: bold; background-color:rgba(188,219,169,1);width=200mm}</style>
+'<style>h3{font: 14pt Tahoma; font-weight: bold; background-color:rgba(157,194,230,1);width=200mm}</style>
+'<style>h4{font: 12pt Tahoma; font-weight: bold; background-color:lightgray;width=200mm}</style>
+'<style>p{font: 12pt Tahoma;width=200mm}</style>
+#hide
+#def ss_WithRef$(Eqn$; Ref$) = <p class="ref">[ Ref$ ]</p> <p> Eqn$'</p>
+#hide
+#def EqnWithRef$(Eqn$; Ref$) = <p>Eqn$ '<span class = "ref", style = "font:9pt Tahoma; text-align: right;color:gray;"> <i>[Ref$]</i></span> </p>
+#def check$(x$; x_maximum$)
+	#if x$ < x_maximum$
+		'<div style = "font:12pt Tahoma; text-align: right;"> Checking:'x$'≤'x_maximum$';'x$/x_maximum$'<1.0✓ SAFE</div>
+	#else
+		'<p class="err">The check is not satisfied:'x$'&gt;'x_maximum$'✖</span></p>
+	#end if
+#end def
+
+'Line break in printed PDF'
+#def break$ = '<p style="page-break-before: always;">''</p>
+#def tab$ = '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'
+'Code Reference'
+#def ref$(text$) = '<span class="ref", style="color: gray; font-size: 9pt; font-style: italic">['text$']</span>'
+#def hide$ = '<!--'
+#def unhide$ = '--!>'
+#def note$(text$) = '<em>&ensp;'text$'</em>'
+#def hline$ = '<hr>
+#def hline2$
+	'<hr>
+	'<hr>
+#end def
+#hide
+ReturnAngleUnits = 1
+mRound(x; n) = round(x/n)*n
+mCeiling(x; n) = ceiling(x/n)*n
+mFloor(x; n) = floor(x/n)*n
+#show
+#def Heading1$(Title$) = '<h1> Title$ </h1>
+#def Heading2$(Title$) = '<h2>Title$ </h2>
+#def Heading3$(Title$) = '<h3> Title$ </h3>
+#def Heading4$(Title$) = '<h4> Title$ </h4>
+#def Headingi$(i$; Title$)
+	#if i$ ≡ 1
+		Heading1$(Title$)
+	#else if i$ ≡ 2
+		Heading2$(Title$)
+	#else if i$ ≡ 3
+		Heading3$(Title$)
+	#else if i$ ≡ 4
+		Heading4$(Title$)
+	#else
+		'<hi$>Title$</hi$>
+	#end if
+#end def
+#local
+Heading1$(Introduction)
+Heading2$(Background)
+Heading2$(Background)
+Heading3$(Scope)
+Heading3$(Assumptions)
+Heading4$(Assumptions)
+'EqnWithRef$(Length,'L = 3m; Reference)
+hline$
+'abcd
+hline2$
+
+
+#global
+#show
+#local
+#for i = 1 : 5
+	Headingi$(i; Title)
+#loop

@@ -1,0 +1,85 @@
+#hide
+#def path$ = "C:/Users/HarikrishnanPanikkav/Harikrishnan Consulting Engineers Pvt Ltd
+#show
+"Coach Screw Capacities to NZS 3603 - Loaded Parallel to Grain"
+'<strong>Timber Member Details</strong>'
+'Timber thickness, 'b = ? {3}*? {45}*mm
+'Effective thickness, 'b_e = 2*b
+'Timber Width, 'w_t = ? {140}mm
+'<strong>Coach screws Details</strong>'
+'Coach screw dia,'d_a = ? {12}mm
+'Depth of penetration, 'p_d = ? {45}mm
+'Number of coach screws in joint, 'n = 4
+'Number of rows of fasteners,'r = 2
+'Number of columns of fasteners,'n_c = n/r
+
+'<strong>Checking the Adequacy of member width for connection</strong><br/>'
+'<img style="height:122pt; width:250pt;" src="./Images/NZS3603-Fig4.1-PositioningOfBolts.png" alt="NZS3603-Fig4.1-PositioningOfBolts.png">
+'Minimum edge distance, 'e_tMin = 2*d_a
+#if r > 1
+	'<p class="ref">[Sec.4.4.1.3(a); Eq.4.10]</p>
+	'Max spacing of coach screws:'a = max(2.5*d_a; d_a*(n - 4 + r)/(r - 1))
+#else
+	a = 0mm
+#end if
+'Minimum member size, 'W_min = e_tMin + (r - 1)*a + e_tMin'
+#if w_t ≥ W_min
+	'<span style = "color:rgba(0,176,80,1);"><strong>Member width is adequate</strong></Span>
+#else
+	'<span class="err">Member width is NOT adequate</span>'
+#end if
+
+'<p class="ref">[Sec.4.4.2(a)]</p>
+'<ins>Capacity of Coach Screw in Single Shear</ins><br />'
+'<p class="ref">[Table 4.8]</p>
+'Factor given in table 4.8,'k_11 = ? {2.0}
+'<p class="ref">[Table 4.8]</p>
+'Boltbearing stress as given by table 4.8,'f_cj = ? {36.1}MPa
+'<p class="ref">[4.4.2(a)]</p>
+Q_kl = min(k_11*f_cj*d_a^2; 0.5*b_e*f_cj*d_a)
+'<p class = "ref">[Table 4.9]</p>
+Q_skl = 1.25*Q_kl
+'<p class = "ref">[Eq. 4.13]</p>
+'Characteristic Strength for a laterally loaded single bolt,'Q_sk = Q_skl
+'[Would agree with Table 4.10 using 'b_e' and 'd_a'after multiplying with 1.25]
+
+'<ins>Nominal Joint Strength [Sec.4.5.2]</ins>'
+'Load duration factor of section 2, 'k_1 = ? {1.0}
+'Modification factor for green timber as given in table 4.14,'k_12 = ? {1.0}
+#hide
+k_13 = if(n ≤ 4; 1.0; if(n ≡ 5; 0.95; if(n ≤ 10; 0.8; 0.62)))
+#show
+'Modification factor for multiple number of fasteners as given in 4.4.3.2,'k_13
+k_thickness = min(1.0; b/(3*d_a))'[Sec.4.5.2(a)]
+k_depth = min(1.0; p_d/(10*d_a))'[Sec.4.5.2(b)]
+k_coachScrew = k_thickness*k_depth
+
+'<strong>Strength of laterally loaded coach-screwed joint (Eq.4.20)</strong>'
+
+'<p class="ref">(Eq.4.21)</p>
+'Nominal joint strength, 'Q_n = n*k_1*k_12*k_13*k_coachScrew*Q_sk
+'<p class="ref">[Sec. 2.5]</p>
+'Strength reduction factor, 'φ = 0.7
+'<div style="font:Tahoma; background-color:rgba(255,255,204,1)">
+'<p class="ref">[Eq.4.20]</p>
+'Strength of laterally loaded coach-screwed joint, 'N_star = φ*Q_n
+
+'<strong>Detailing Requirements</strong>'
+'<p class="ref">[Fig. 4.1]</p>
+'Spacing needed between screws parallel to grain, 'S_long = 5*d_a
+'Minimum end distance for coach screws parallel to grain, 'e_1 = 8*d_a
+'Minimum edge distance, 'e_t = 2*d_a
+'<p class="ref">[Sec.4.4.1.3(a); Fig. 4.1]</p>
+'Minimum spacing perpendicular to grain'S_tran = a
+
+'Total length along grain,'L_j = e_1 + (n_c - 1)*S_long + ? {1.5}*d_a
+'</div>
+"Coach Screw Capacities to NZS 3603 - In Withdrawal"
+'<h5>For Coach screws in Withdrawal[sec.4.5.2]</h5>
+'Coach screw dia, 'd_a
+'Depth of penetration, 'p_d = ? {10}*d_a
+'Number of screws in tension, 'n_t = 2
+'Modification factor ,'k = 1
+'Characteristic withdrawal strength, 'Q_k = 96N/mm
+'Nominal joint strength in withdrawal, 'Q_n = n_t*k*p_d*Q_k
+'Allowable tension, 'N_star = φ*Q_n

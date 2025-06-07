@@ -1,0 +1,82 @@
+"Masonry Properties"
+'<p>Brick Hardness: 
+'<input name="cBrickHardness" type="radio" id="OptionSoft" value="1"/>
+'<label for="OptionSoft">Soft</label>
+'<input name="cBrickHardness" type="radio" id="OptionMedium" value="2"/>
+'<label for="OptionMedium">Medium</label>
+'<input name="cBrickHardness" type="radio" id="OptionHard" value="3"/>
+'<label for="OptionHard">Hard</label>
+'<p id="cBrickHardness">Brick Hardness choice:'cBrickHardness = ? {3}'<em>[1 = soft; 2 = Medium; 3 = Hard]</em></p>
+
+f_bm(cBrickHardness) = switch(cBrickHardness ≡ 1; 14MPa; cBrickHardness ≡ 2; 26MPa; cBrickHardness ≡ 3; 35MPa; 0MPa)
+f_btm(cBrickHardness) = switch(cBrickHardness ≡ 1; 1.7MPa; cBrickHardness ≡ 2; 3.1MPa; cBrickHardness ≡ 3; 4.2MPa; 0MPa)
+'<hr>
+'<p>MortarHardness: 
+'<input name="cMortarHardness" type="radio" id="OptionVerySoft" value="1"/>
+'<label for="OptionVerySoft">Very Soft</label>
+'<input name="cMortarHardness" type="radio" id="OptionSoft" value="2"/>
+'<label for="OptionSoft">Soft</label>
+'<input name="cMortarHardness" type="radio" id="OptionMedium" value="3"/>
+'<label for="OptionMedium">Medium</label>
+'<input name="cMortarHardness" type="radio" id="OptionHard" value="4"/>
+'<label for="OptionHard">Hard</label>
+'<input name="cMortarHardness" type="radio" id="OptionVeryHard" value="5"/>
+'<label for="OptionVeryHard">Hard</label>
+'<p id="cMortarHardness">Mortar Hardness choice:'cMortarHardness = ? {4}'<em>[1 = very soft; 2 = soft; 3 = medium; 4 = Hard; 5 = very hard]</em></p>
+#hide
+f_jm(cMortarHardness) = switch(cMortarHardness ≡ 1; 0MPa; cMortarHardness ≡ 2; 1MPa; cMortarHardness ≡ 3; 2MPa; cMortarHardness ≡ 4; 5MPa; cMortarHardness ≡ 5; 5MPa; 0MPa)
+c_m,masonry(cMortarHardness) = switch(cMortarHardness ≡ 1; 0.1MPa; cMortarHardness ≡ 2; 0.3MPa; cMortarHardness ≡ 3; 0.5MPa; cMortarHardness ≡ 4; 0.7MPa; cMortarHardness ≡ 5; 0.7MPa; 0MPa)
+μ_fm(cMortarHardness) = switch(cMortarHardness ≤ 2; 0.3; cMortarHardness ≡ 3; 0.6; cMortarHardness ≤ 5; 0.8; 0)
+'<hr>
+f_m(Brick; Mortar) = if(f_jm(Mortar) < 1MPa; 0.75*(f_bm(Brick)/MPa)^0.75; _
+0.75*(f_bm(Brick)/MPa)^0.75*(f_jm(Mortar)/MPa)^0.3)*MPa
+'<hr>
+'<hr>
+P_wm(L; t; h; γ) = L*t*h*γ
+f_am(L; t; h; γ; P) = (P + P_wm(L; t; h; γ))/(L*t)
+'<hr>
+
+K_R,rocking = 3
+K_R,sliding = 3
+K_R,toe = 1.5
+K_R,dt = 1.0
+"Toe Crushing Capacity"
+V_tc,FixedFree(t; L; h; γ; Brick; Mortar; P) = (0.5*P + 0.5*P_wm(L; t; h; γ))*(L/h)*(1 - f_am(L; t; h; γ; P)/(0.7*f_m(Brick; Mortar)))
+V_tc,FixedFixed(t; L; h; γ; Brick; Mortar; P) = (1.0*P + 0.5*P_wm(L; t; h; γ))*(L/h)*(1 - f_am(L; t; h; γ; P)/(0.7*f_m(Brick; Mortar)))
+
+"Diagonal Tension Capacity"
+β_masonry(L_w; h_eff) = if(h_eff/L_w > 1.5; 0.67; if(h_eff/L_w < 1; 1; 0.67 + (1 - 0.67)/-0.5*(h_eff/L_w - 1.5)))
+f_dt(t; L; h; γ; Mortar; P) = 0.5*c_m,masonry(Mortar) + f_am(L; t; h; γ; P)*μ_fm(Mortar)
+
+V_dt(t; L; h; γ; Brick; Mortar; P) = f_dt(t; L; h; γ; Mortar; P)*L*t*β_masonry(L; h)*sqrt(1 + (f_am(L; t; h; γ; P)/f_dt(t; L; h; γ; Mortar; P)))
+
+"Pier Rocking Capacity"
+V_r,FixedFree(t; L; h; γ; P) = 0.9*(0.5*P + 0.5*P_wm(L; t; h; γ))*L/h
+V_r,FixedFixed(t; L; h; γ; P) = 0.9*(1.0*P + 0.5*P_wm(L; t; h; γ))*L/h
+
+"Bedjoint Sliding Capacity"
+V_dpc(t; L; h; γ; μ_dpc; P) = μ_dpc*(P + P_wm(L; t; h; γ))
+
+"Slip Plane Sliding Capacity"
+V_slip(t; L; h; γ; Mortar; P) = 0.7*(t*L*0MPa + μ_fm(Mortar)*(P + P_wm(L; t; h; γ)))
+
+"OVerall"
+V_pier,Fixed.Free(t; L; h; γ; Brick; Mortar; P; μ_dpc) = min( _
+K_R,toe*V_tc,FixedFree(t; L; h; γ; Brick; Mortar; P); _
+K_R,dt*V_dt(t; L; h; γ; Brick; Mortar; P); _
+K_R,rocking*V_r,FixedFree(t; L; h; γ; P); _
+K_R,sliding*V_dpc(t; L; h; γ; μ_dpc; P); _
+K_R,sliding*V_slip(t; L; h; γ; Mortar; P))
+V_pier,Fixed.Fixed(t; L; h; γ; Brick; Mortar; P; μ_dpc) = min( _
+K_R,toe*V_tc,FixedFixed(t; L; h; γ; Brick; Mortar; P); _
+K_R,dt*V_dt(t; L; h; γ; Brick; Mortar; P); _
+K_R,rocking*V_r,FixedFixed(t; L; h; γ; P); _
+K_R,sliding*V_dpc(t; L; h; γ; μ_dpc; P); _
+K_R,sliding*V_slip(t; L; h; γ; Mortar; P))
+
+"Loads"
+W_r(A; g) = A*g
+W_w(L; g; h) = L*h*g
+W_w,half(L; g; h) = L*h/2*g
+
+#show

@@ -1,0 +1,496 @@
+#local
+"Estimation of Seismic Design Parameters As per NZS 1170.5 Based on GPS Coordinates"
+#include AB Style V0.cpd
+#global
+
+'<p>Importance Level: 
+'<input name="oIL" type="radio" id="opt1" value="1"/>
+'<label for="opt1">IL1</label>
+'<input name="oIL" type="radio" id="opt2" value="2"/>
+'<label for="opt2">IL 2</label>
+'<input name="oIL" type="radio" id="opt3" value="3"/>
+'<label for="opt3">IL 3</label>
+'<input name="oIL" type="radio" id="opt4" value="4"/>
+'<label for="opt4">IL 4</label>
+'<p id="oIL">'IL = ? {2}'</p>
+
+#hide
+#if IL ≡ 1
+	TR_ULS = 100
+	TR_SLS = 1
+#else if IL ≡ 2
+	TR_ULS = 500
+	TR_SLS = 25
+#else if IL ≡ 3
+	TR_ULS = 1000
+	TR_SLS = 25
+#else if IL ≡ 4
+	TR_ULS = 2500
+	TR_SLS = 25
+#else
+	TR_ULS = 100000
+	TR_SLS = 100000
+#end if
+TR_factor(ReturnPeriod) = switch(ReturnPeriod ≡ 2500; 1.8; ReturnPeriod ≡ 2000; 1.7; ReturnPeriod ≡ 1000; 1.3; ReturnPeriod ≡ 500; 1.0; ReturnPeriod ≡ 250; 0.75; ReturnPeriod ≡ 100; 0.5; ReturnPeriod ≡ 50; 0.35; ReturnPeriod ≡ 25; 0.25; ReturnPeriod ≡ 20; 0.2; 2.0)
+R_u,1170 = TR_factor(TR_ULS)
+R_s,1170 = TR_factor(TR_SLS)
+
+PointFromCoordinates(Northing; Easting) = [Northing; Easting]
+Lat(Point) = take(2; Point)*deg
+Lon(Point) = take(1; Point)*deg
+dLon(Point1; Point2) = Lon(Point2) - Lon(Point1)
+dLat(Point1; Point2) = Lat(Point2) - Lat(Point1)
+Haversine_a(P1; P2) = sin(dLat(P1; P2)/2)*sin(dLat(P1; P2)/2) + cos(Lat(P1))*cos(Lat(P2))*sin(dLon(P1; P2)/2)*sin(dLon(P1; P2)/2)
+Haversine_c(P1; P2) = 2*(atan2(sqrt(1 - Haversine_a(P1; P2)); sqrt(Haversine_a(P1; P2)))*deg)
+DistanceFromGPS(P1; P2) = 6371km*Haversine_c(P1; P2)/rad
+Loc_Set1 = [ _
+101; 0.3; 100; -43.804141666667; 172.96818888889| _
+114; 0.21; 100; -45.249166666667; 169.37972222222| _
+113; 0.3; 100; -44.9425; 168.83583333333| _
+104; 0.2; 100; -43.905555555556; 171.74555555556| _
+7; 0.13; 100; -36.85; 174.78333333333| _
+125; 0.13; 100; -46.241666666667; 169.73333333333| _
+127; 0.15; 100; -46.6; 168.33333333333| _
+58; 0.31; 100; -40.175; 175.38333333333| _
+21; 0.18; 100; -37.883333333333; 175.46666666667| _
+90; 0.4; 100; -42.812777777778; 173.27388888889| _
+102; 0.3; 100; -43.5308888888889; 172.6365| _
+111; 0.24; 100; -45.04; 169.2| _
+100; 0.3; 100; -43.488; 172.109| _
+5; 0.1; 100; -35.933333333333; 173.88333333333| _
+119; 0.13; 100; -45.8741666666667; 170.503611111111| _
+105; 0.24; 100; -44.1; 170.83333333333| _
+59; 0.37; 100; -40.225; 175.565| _
+64; 0.36; 100; -40.471666666667; 175.28583333333| _
+103; 0.19; 100; -44.090277777778; 171.24333333333| _
+39; 0.36; 100; -38.6625; 178.01777777778| _
+123; 0.18; 100; -46.099166666667; 168.94638888889| _
+91; 0.37; 100; -42.45; 171.2075| _
+20; 0.16; 100; -37.783333333333; 175.28333333333| _
+52; 0.39; 100; -39.65; 176.83333333333| _
+46; 0.18; 100; -39.589; 174.282| _
+94; 0.45; 100; -42.716666666667; 170.96666666667| _
+14; 0.15; 100; -37.558333333333; 175.15833333333| _
+43; 0.18; 100; -39.15; 174.2| _
+128; 0.17; 100; -46.429; 168.362| _
+3; 0.1; 100; -35.4075; 173.79972222222| _
+1; 0.1; 100; -35.1125; 173.26277777778| _
+31; 0.29; 100; -38.0882605277903; 176.702190077263| _
+65; 0.4; 100; -40.625; 175.28333333333| _
+8; 0.13; 100; -36.983333333333; 174.88333333333| _
+29; 0.21; 100; -38.369; 175.775| _
+57; 0.3; 100; -40.069166666667; 175.37833333333| _
+23; 0.19; 100; -37.809722222222; 175.77333333333| _
+126; 0.17; 100; -46.18333333; 168.86666667| _
+116; 0.54; 100; -44.6166666666667; 167.866666666667| _
+16; 0.18; 100; -37.65; 175.51666666667| _
+120; 0.13; 100; -45.875; 170.348| _
+78; 0.26; 100; -41.123333333333; 173.01472222222| _
+19; 0.2; 100; -37.643; 176.185| _
+108; 0.38; 100; -41.301764; 174.774031| _
+85; 0.34; 100; -41.8; 172.33333333333| _
+35; 0.3; 100; -38.456; 176.705| _
+51; 0.38; 100; -39.4902777777778; 176.917777777778| _
+79; 0.27; 100; -41.2982438207578; 173.244341751204| _
+42; 0.18; 100; -39.057777777778; 174.07416666667| _
+15; 0.15; 100; -37.668; 175.147| _
+118; 0.13; 100; -45.089444444444; 170.96611111111| _
+129; 0.14; 100; -46.89805080622272; 168.12421702629393| _
+49; 0.27; 100; -39.418611111111; 175.39944444444| _
+33; 0.3; 100; -38.01173089053256; 177.2864038851903| _
+45; 0.18; 100; -39.4525; 173.85472222222| _
+66; 0.4; 100; -40.75833; 175.15| _
+27; 0.17; 100; -38.18084349767055; 175.21327840457155| _
+12; 0.18; 100; -37.383; 175.674| _
+2; 0.1; 100; -35.2822222222222; 174.091111111111| _
+117; 0.13; 100; -40.354911; 175.609511| _
+47; 0.19; 100; -39.757222222222; 174.47666666667| _
+10; 0.13; 100; -37.203; 174.904| _
+25; 0.21; 100; -38.053; 175.78| _
+115; 0.32; 100; -45.031111111111; 168.6625| _
+48; 0.26; 100; -39.4274; 175.282| _
+99; 0.33; 100; -43.304722222222; 172.58916666667| _
+84; 0.37; 100; -42.1167; 171.867| _
+121; 0.2; 100; -46.35458483699031; 168.00979238029234| _
+30; 0.24; 100; -38.137777777778; 176.25138888889| _
+34; 0.33; 100; -37.89; 178.31| _
+44; 0.18; 100; -39.341; 174.284| _
+56; 0.33; 100; -39.676666666667; 175.79666666667| _
+77; 0.23; 100; -40.85; 172.8| _
+37; 0.21; 100; -38.883333333333; 175.26166666667| _
+36; 0.28; 100; -38.69; 176.08| _
+18; 0.2; 100; -37.685833333333; 176.16666666667| _
+122; 0.36; 100; -45.416666666667; 167.71666666667| _
+17; 0.18; 100; -37.538796; 175.709143| _
+22; 0.17; 100; -38.008333333333; 175.325| _
+28; 0.18; 100; -38.335; 175.165| _
+24; 0.22; 100; -37.783333333333; 176.31666666667| _
+106; 0.17; 100; -44.243061111111; 171.27725555556| _
+11; 0.16; 100; -37.1384; 175.5405| _
+107; 0.15; 100; -44.3930555555556; 171.250833333333| _
+26; 0.21; 100; -38.22; 175.872| _
+38; 0.27; 100; -38.989; 175.81| _
+109; 0.27; 100; -44.258333333333; 170.1| _
+13; 0.18; 100; -37.393; 175.832| _
+110; 0.14; 100; -44.732661; 171.048106| _
+50; 0.29; 100; -39.469; 175.676| _
+54; 0.41; 100; -39.941666666667; 176.5875| _
+55; 0.41; 100; -39.995; 176.557| _
+40; 0.37; 100; -39.03538380458528; 177.4214084064444| _
+41; 0.18; 100; -38.995833333333; 174.23305555556| _
+9; 0.13; 100; -37.25; 174.73333333333]
+
+Loc_Set2 = [ _
+112; 0.3; 100; -44.69275897028282; 169.14306801281677| _
+53; 0.25; 100; -39.9325; 175.051944444444| _
+6; 0.13; 100; -36.4; 174.66666666667| _
+83; 0.3; 100; -41.755; 171.599| _
+32; 0.3; 100; -37.964; 176.984| _
+4; 0.1; 100; -35.725; 174.32361111111| _
+124; 0.2; 100; -46.143; 168.324 _
+]
+Locations = stack(Loc_Set1; Loc_Set2)
+n_locs = n_rows(Locations)
+#pre
+'Northing of the location:'Northing = ? {-37.7928063380507}
+'Easting of the location :'Easting = ? {175.2843447867821}
+#post
+Loc = [Northing; Easting]
+#hide
+
+loc_1 = submatrix(Locations; 1; 1; 4; 5)
+d_min = DistanceFromGPS(Loc; loc_1)
+i_min = 1
+#for i = 2 : n_rows(Locations)
+	loc_i = PointFromCoordinates(Locations.(i; 4); Locations.(i; 5))
+	d = DistanceFromGPS(Loc; loc_i)
+	#if d < d_min
+		d_min = d
+		i_min = i
+	#end if
+#loop
+z_1170.5 = Locations.(i_min; 2)
+D_1170.5 = Locations.(i_min; 3)*km
+TownNo = Locations.(i_min; 1)
+
+C_h,A(T) = if(T ≡ 0s; 1.0; if(T < 0.1s; 1.0 + 1.35*(T/0.1s); if(T < 0.3s; 2.35; if(T ≤ 1.5s; 1.6*(0.5s/T)^0.75; if(T ≤ 3s; 1.05s/T; 3.15*s^2/T^2)))))
+
+C_h,B(T) = C_h,A(T)
+C_h,C(T) = if(T ≡ 0s; 1.33; if(T < 0.1s; 1.33 + 1.60*(T/0.1s); if(T < 0.3s; 2.93; if(T ≤ 1.5s; 2.0*(0.5s/T)^0.75; if(T ≤ 3s; 1.32s/T; 3.96*s^2/T^2)))))
+C_h,D(T) = if(T ≡ 0s; 1.12; if(T < 0.1s; 1.12 + 1.88*(T/0.1s); if(T < 0.56s; 3.00; if(T ≤ 1.5s; 2.4*(0.75s/T)^0.75; if(T ≤ 3s; 2.14s/T; 6.42*s^2/T^2)))))
+
+
+
+N_TD,max(T) = if(T ≤ 1.5s; 1.0; if(T ≤ 2s; 1.12; if(T ≤ 3s; 1.36; if(T ≤ 4s; 1.60; 1.72))))
+N_TD(T; D; R) = if(R < 250; 1.0; if(D ≤ 2km; N_TD,max(T); if(D ≤ 20km; 1 + (N_TD,max(T) - 1)*(20km - D)/18km; 1.0)))
+
+
+g = 9.80665m/s^2
+
+#show
+#post
+d_min'at Location ='TownNo'[Table 3.3 of NZS 1170.5]
+#if TownNo ≡ 1
+	tab$'Closest Town = Kaitaia'
+#else if TownNo ≡ 2
+	tab$'Closest Town = Paihia/Russell'
+#else if TownNo ≡ 3
+	tab$'Closest Town = Kaikohe'
+#else if TownNo ≡ 4
+	tab$'Closest Town = Whangarei'
+#else if TownNo ≡ 5
+	tab$'Closest Town = Dargaville'
+#else if TownNo ≡ 6
+	tab$'Closest Town = Warkworth'
+#else if TownNo ≡ 7
+	tab$'Closest Town = Auckland'
+#else if TownNo ≡ 8
+	tab$'Closest Town = Manakau City'
+#else if TownNo ≡ 9
+	tab$'Closest Town = Waiuku'
+#else if TownNo ≡ 10
+	tab$'Closest Town = Pukekohe'
+#else if TownNo ≡ 11
+	tab$'Closest Town = Thames'
+#else if TownNo ≡ 12
+	tab$'Closest Town = Paeroa'
+#else if TownNo ≡ 13
+	tab$'Closest Town = Waihi'
+#else if TownNo ≡ 14
+	tab$'Closest Town = Huntly'
+#else if TownNo ≡ 15
+	tab$'Closest Town = Ngaruawahia'
+#else if TownNo ≡ 16
+	tab$'Closest Town = Morrinsville'
+#else if TownNo ≡ 17
+	tab$'Closest Town = Te Aroha'
+#else if TownNo ≡ 18
+	tab$'Closest Town = Tauranga'
+#else if TownNo ≡ 19
+	tab$'Closest Town = Mount Maunganui'
+#else if TownNo ≡ 20
+	tab$'Closest Town = Hamilton'
+#else if TownNo ≡ 21
+	tab$'Closest Town = Cambridge'
+#else if TownNo ≡ 22
+	tab$'Closest Town = Te Awamutu'
+#else if TownNo ≡ 23
+	tab$'Closest Town = Matamata'
+#else if TownNo ≡ 24
+	tab$'Closest Town = Te Puke'
+#else if TownNo ≡ 25
+	tab$'Closest Town = Putaruru'
+#else if TownNo ≡ 26
+	tab$'Closest Town = Tokoroa'
+#else if TownNo ≡ 27
+	tab$'Closest Town = Otorohanga'
+#else if TownNo ≡ 28
+	tab$'Closest Town = Te Kuiti'
+#else if TownNo ≡ 29
+	tab$'Closest Town = Mangakino'
+#else if TownNo ≡ 30
+	tab$'Closest Town = Rotorua'
+#else if TownNo ≡ 31
+	tab$'Closest Town = Kawerau'
+#else if TownNo ≡ 32
+	tab$'Closest Town = Whakatane'
+#else if TownNo ≡ 33
+	tab$'Closest Town = Opotiki'
+#else if TownNo ≡ 34
+	tab$'Closest Town = Ruatoria'
+#else if TownNo ≡ 35
+	tab$'Closest Town = Murupara'
+#else if TownNo ≡ 36
+	tab$'Closest Town = Taupo'
+#else if TownNo ≡ 37
+	tab$'Closest Town = Taumarunui'
+#else if TownNo ≡ 38
+	tab$'Closest Town = Turangi'
+#else if TownNo ≡ 39
+	tab$'Closest Town = Gisborne'
+#else if TownNo ≡ 40
+	tab$'Closest Town = Wairoa'
+#else if TownNo ≡ 41
+	tab$'Closest Town = Waitara'
+#else if TownNo ≡ 42
+	tab$'Closest Town = New Plymouth'
+#else if TownNo ≡ 43
+	tab$'Closest Town = Inglewood'
+#else if TownNo ≡ 44
+	tab$'Closest Town = Stratford'
+#else if TownNo ≡ 45
+	tab$'Closest Town = Opunake'
+#else if TownNo ≡ 46
+	tab$'Closest Town = Hawera'
+#else if TownNo ≡ 47
+	tab$'Closest Town = Patea'
+#else if TownNo ≡ 48
+	tab$'Closest Town = Raetihi'
+#else if TownNo ≡ 49
+	tab$'Closest Town = Ohakune'
+#else if TownNo ≡ 50
+	tab$'Closest Town = Waiouru'
+#else if TownNo ≡ 51
+	tab$'Closest Town = Napier'
+#else if TownNo ≡ 52
+	tab$'Closest Town = Hastings'
+#else if TownNo ≡ 53
+	tab$'Closest Town = Wanganui'
+#else if TownNo ≡ 54
+	tab$'Closest Town = Waipawa'
+#else if TownNo ≡ 55
+	tab$'Closest Town = Waipukurau'
+#else if TownNo ≡ 56
+	tab$'Closest Town = Taihape'
+#else if TownNo ≡ 57
+	tab$'Closest Town = Marton'
+#else if TownNo ≡ 58
+	tab$'Closest Town = Bulls'
+#else if TownNo ≡ 59
+	tab$'Closest Town = Feilding'
+#else if TownNo ≡ 60
+	tab$'Closest Town = Palmerston North'
+#else if TownNo ≡ 61
+	tab$'Closest Town = Dannevirke'
+#else if TownNo ≡ 62
+	tab$'Closest Town = Woodville'
+#else if TownNo ≡ 63
+	tab$'Closest Town = Pahiatua'
+#else if TownNo ≡ 64
+	tab$'Closest Town = Foxton/Foxton Beach'
+#else if TownNo ≡ 65
+	tab$'Closest Town = Levin'
+#else if TownNo ≡ 66
+	tab$'Closest Town = Otaki'
+#else if TownNo ≡ 67
+	tab$'Closest Town = Waikanae'
+#else if TownNo ≡ 68
+	tab$'Closest Town = Paraparaumu'
+#else if TownNo ≡ 69
+	tab$'Closest Town = Masterton'
+#else if TownNo ≡ 70
+	tab$'Closest Town = Porirua'
+#else if TownNo ≡ 71
+	tab$'Closest Town = Wellington CBD (north of Basin Reserve)'
+#else if TownNo ≡ 72
+	tab$'Closest Town = Wellington'
+#else if TownNo ≡ 73
+	tab$'Closest Town = Hutt Valley-South of Taita Gorge'
+#else if TownNo ≡ 74
+	tab$'Closest Town = Upper Hutt'
+#else if TownNo ≡ 75
+	tab$'Closest Town = Eastbourne – Point Howard'"
+#else if TownNo ≡ 76
+	tab$'Closest Town = Wainuiomata'
+#else if TownNo ≡ 77
+	tab$'Closest Town = Takaka'
+#else if TownNo ≡ 78
+	tab$'Closest Town = Motueka'
+#else if TownNo ≡ 79
+	tab$'Closest Town = Nelson'
+#else if TownNo ≡ 80
+	tab$'Closest Town = Picton'
+#else if TownNo ≡ 81
+	tab$'Closest Town = Blenheim'
+#else if TownNo ≡ 82
+	tab$'Closest Town = St Arnaud'
+#else if TownNo ≡ 83
+	tab$'Closest Town = Westport'
+#else if TownNo ≡ 84
+	tab$'Closest Town = Reefton'
+#else if TownNo ≡ 85
+	tab$'Closest Town = Murchison'
+#else if TownNo ≡ 86
+	tab$'Closest Town = Springs Junction'
+#else if TownNo ≡ 87
+	tab$'Closest Town = Hanmer Springs'
+#else if TownNo ≡ 88
+	tab$'Closest Town = Seddon'
+#else if TownNo ≡ 89
+	tab$'Closest Town = Ward'
+#else if TownNo ≡ 90
+	tab$'Closest Town = Cheviot'
+#else if TownNo ≡ 91
+	tab$'Closest Town = Greymouth'
+#else if TownNo ≡ 92
+	tab$'Closest Town = Kaikoura'
+#else if TownNo ≡ 93
+	tab$'Closest Town = Harihari'
+#else if TownNo ≡ 94
+	tab$'Closest Town = Hokitika'
+#else if TownNo ≡ 95
+	tab$'Closest Town = Fox Glacier'
+#else if TownNo ≡ 96
+	tab$'Closest Town = Franz Josef'
+#else if TownNo ≡ 97
+	tab$'Closest Town = Otira'
+#else if TownNo ≡ 98
+	tab$'Closest Town = Arthurs Pass'
+#else if TownNo ≡ 99
+	tab$'Closest Town = Rangiora'
+#else if TownNo ≡ 100
+	tab$'Closest Town = Darfield'
+#else if TownNo ≡ 101
+	tab$'Closest Town = Akaroa'
+#else if TownNo ≡ 102
+	tab$'Closest Town = Christchurch'
+#else if TownNo ≡ 103
+	tab$'Closest Town = Geraldine'
+#else if TownNo ≡ 104
+	tab$'Closest Town = Ashburton'
+#else if TownNo ≡ 105
+	tab$'Closest Town = Fairlie'
+#else if TownNo ≡ 106
+	tab$'Closest Town = Temuka'
+#else if TownNo ≡ 107
+	tab$'Closest Town = Timaru'
+#else if TownNo ≡ 108
+	tab$'Closest Town = Mt Cook'
+#else if TownNo ≡ 109
+	tab$'Closest Town = Twizel'
+#else if TownNo ≡ 110
+	tab$'Closest Town = Waimate'
+#else if TownNo ≡ 111
+	tab$'Closest Town = Cromwell'
+#else if TownNo ≡ 112
+	tab$'Closest Town = Wanaka'
+#else if TownNo ≡ 113
+	tab$'Closest Town = Arrowtown'
+#else if TownNo ≡ 114
+	tab$'Closest Town = Alexandra'
+#else if TownNo ≡ 115
+	tab$'Closest Town = Queenstown'
+#else if TownNo ≡ 116
+	tab$'Closest Town = Milford Sound'
+#else if TownNo ≡ 117
+	tab$'Closest Town = Palmerston'
+#else if TownNo ≡ 118
+	tab$'Closest Town = Oamaru'
+#else if TownNo ≡ 119
+	tab$'Closest Town = Dunedin'
+#else if TownNo ≡ 120
+	tab$'Closest Town = Mosgiel'
+#else if TownNo ≡ 121
+	tab$'Closest Town = Riverton'
+#else if TownNo ≡ 122
+	tab$'Closest Town = Te Anau'
+#else if TownNo ≡ 123
+	tab$'Closest Town = Gore'
+#else if TownNo ≡ 124
+	tab$'Closest Town = Winton'
+#else if TownNo ≡ 125
+	tab$'Closest Town = Balclutha'
+#else if TownNo ≡ 126
+	tab$'Closest Town = Mataura'
+#else if TownNo ≡ 127
+	tab$'Closest Town = Bluff'
+#else if TownNo ≡ 128
+	tab$'Closest Town = Invercargill'
+#else if TownNo ≡ 129
+	tab$'Closest Town = Oban'
+#end if
+#show
+'Period of Structure, 'T_1 = ? {0.4}s
+'Return period ,'TR_ULS'years for ULS and ,'TR_SLS'years for SLS'ref$('Table 3.3,NZS 1170.0')
+'Spectral shape factor,'C_h = ? {3.0}*g''ref$('Table 3.1, NZS 1170.5')
+'Hazard factor,'z_1170.5''ref$('Table 3.3, NZS 1170.5')
+'Return period factor,'R_u,1170'[ULS] and 'tab$''R_s,1170'[SLS]'ref$('Table 3.5, NZS 1170.5')
+'Near fault factors:'ref$('Cl.3.1.6, NZS 1170.5')
+tab$''N_TD(T_1; D_1170.5; TR_ULS)'[ULS] and'
+tab$''N_TD(T_1; D_1170.5; TR_SLS)'[SLS]'
+#post
+C_ULS(T) = C_h*z_1170.5*R_u,1170*N_TD(T_1; D_1170.5; TR_ULS)/g
+C_SLS(T) = C_h*z_1170.5*R_s,1170*N_TD(T_1; D_1170.5; TR_SLS)/g
+C_ULS(T_1)'[ULS] and'C_SLS(T_1)'[SLS]'ref$('Eq. 3.1(1), NZS 1170.5')
+#hide
+'Structural performance factor,'S_pμ,ULS(μ) = if(μ < 2.0; 1.3 - 0.3*μ; 0.7)
+'Structural performance factor,'S_pμ,SLS(μ) = 0.7
+'Ductility factor,'kμ(T1; μ) = if(T1 ≥ 0.7s; μ; (μ - 1)*T1/(0.7s) + 1)
+'Design seismic coefficient,'C_d,ULS_1170(T1; μ) = C_ULS(T1)*S_pμ,ULS(μ)/kμ(T1; μ)
+'Design seismic coefficient,'C_d,SLS_1170(T1; μ) = C_SLS(T1)*S_pμ,SLS(μ)/kμ(T1; μ)
+#show
+#def C_d_ULSCalc$(T1$; mu$)
+	#novar
+	'['C_ULS(T1$)'*'S_pμ,ULS(mu$)'/'kμ(T1$; mu$)'] ='C_d,ULS_1170(T1$; mu$)
+	#varsub
+#end def
+#def C_d_SLSCalc$(T1$; mu$)
+	#novar
+	'['C_SLS(T1$)'*'S_pμ,SLS(mu$)'/'kμ(T1$; mu$)'] ='C_d,SLS_1170(T1$; mu$)
+	#varsub
+#end def
+#show
+'Ductility,'μ = ? {3}
+#post
+'Structural performance factor,'S_p,ULS = S_pμ,ULS(μ)
+'Ductility factor,'k_μ = kμ(T_1; μ)
+'Design seismic coefficient,'C_d,ULS = C_d,ULS_1170(T_1; μ)
+
+C_d_ULSCalc$(T_1; μ)
+C_d_SLSCalc$(T_1; μ)
+'Design seismic coefficient,'C_d,SLS = C_d,SLS_1170(T_1; μ)
+hline2$
+C_d,ULS''tab$C_d,SLS
+#local
+hline2$
+#include NZS 1170.5 Equivalent Static - V0.cpd

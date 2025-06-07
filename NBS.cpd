@@ -1,0 +1,36 @@
+#local
+#hide
+mRound(n; x) = x*round(n/x)
+#global
+#hide
+AssignedNBS(NBS) = switch(mRound(NBS; 1%) ≤ 17%; 15%; _
+mRound(NBS; 1%) ≡ 18%; 18%; _
+mRound(NBS; 1%) ≡ 19%; 19%; _
+mRound(NBS; 1%) ≤ 22%; 20%; _
+mRound(NBS; 1%) ≤ 27%; 25%; _
+mRound(NBS; 1%) ≤ 32%; 30%; _
+mRound(NBS; 1%) ≡ 33%; 33%; _
+mRound(NBS; 1%) ≡ 34%; 34%; _
+mRound(NBS; 1%) ≤ 37%; 35%; _
+mRound(NBS; 1%) ≤ 42%; 40%; _
+mRound(NBS; 1%) ≤ 47%; 45%; _
+mRound(NBS; 1%) ≤ 52%; 50%; _
+mRound(NBS; 1%) ≤ 57%; 55%; _
+mRound(NBS; 1%) ≤ 62%; 60%; _
+mRound(NBS; 1%) ≤ 66%; 65%; _
+mRound(NBS; 1%) ≡ 67%; 67%; _
+mRound(NBS; 1%) ≤ 72%; 70%; _
+mRound(NBS; 1%) ≤ 77%; 75%; _
+mRound(NBS; 1%) ≤ 82%; 80%; _
+mRound(NBS; 1%) ≤ 87%; 85%; _
+mRound(NBS; 1%) ≤ 92%; 90%; _
+mRound(NBS; 1%) ≤ 97%; 95%; _
+100%)
+#def AssignedNBSText$(NBS$; IL$)
+	#novar
+	AssignedNBS(NBS$)'<em><strong>NBS(IL'IL$')</strong></em>
+	#varsub
+#end def
+#show
+#local
+AssignedNBSText$(44.3%; 2)

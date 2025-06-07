@@ -1,0 +1,66 @@
+#local
+#include AB Style V0.cpd
+#global
+"Wall Geometry"
+'Thickness of wall,'t_w = ? {190}mm
+'Unsupported height of wall,'h_w = ? {2.9}m
+'Restraint height,'h_w,b = ? {0}m'[Bottom] and'h_w,t = ? {2.9}m'[Top]
+'Height from the base of the structure to the uppermost seismic weight/mass,'h_parapet = ? {4.335}m
+"Material Properties"
+'Unit weight of wall,'γ_wall = ? {16}kN/m^3
+#post
+Heading4$(Step 1: Dividing the wall panel)
+'Height of wall from centroid of bottom half of panel,'Y_b = h_w/2
+Heading4$(Step 2: Weight of wall parts)
+'<h5>Weight of Wall</h5>'ref$('Step 2, Page C8-93')
+'Weight of bottom half of wall,'W_b = γ_wall*(h_w)*t_w
+'Total Weight of wall,'W_wall = W_b
+'Weight acting on top of wall,'P = 0kN/m
+Heading4$(Step 3: Effective thickness)
+'Nominal thickness of wall,'t_nom = t_w
+'Effective thickness of wall,'t = 0.98*t_nom''ref$('Step 3, C8-100')
+Heading4$(Step 4: Assess the maximum eccenticities)
+'Bottom Eccentricity,'e_b = t/2
+Heading4$(Step 5: Calculate the mid-height deflection)
+'Mid-height deflection that would cause instability under static conditions,'
+Δ_i = t|mmref$('Vertical Cantilevers')
+Heading4$(Step 6: Calculate the (maximum) usable deflection)
+'Maximum usable deflection,'Δ_m = 0.3*Δ_i''ref$('Step 4, C8-100')
+Heading4$(Step 7: Calculate the period)
+#hide
+g = 9.8067m/s^2
+#post
+'Period of parts,'T_p = sqrt(0.65*h_w/m*(1 + (t_nom/h_w)^2))*sref$('Eq. C8.24')
+Heading4$(Step 8: Calculate Seismic Coefficients)
+h_i = h_w,t';'h_n = h_parapet
+#show
+C_h0 = ? {1.33}ref$('Table 3.1, NZS 1170.5')
+Z = ? {0.16}ref$('Cl. 3.1.4, NZS 1170.5')
+R = ? {1.0}
+N_TD = ? {1.0}
+#post
+C_0 = C_h0*Z*R*N_TD
+C_Hi(h_i) = switch(h_i < 12m; 1 + (h_i/6m); h_i < 0.2*h_n; 1 + 10*(h_i/h_n); 3.0)
+C_i(T_p) = switch(T_p < 0.5s; 2.0; _
+T_p < 1.5s; 2.0*(0.5s/T_p)^0.75; _
+T_p < 3s; 1.32s/T_p; _
+3.96s^2/T_p^2)
+C_p(T_p) = C_0*C_Hi(h_i)*C_i(T_p)
+hline$
+#hide
+C_ii = C_i(T_p)
+C_pi = C_p(T_p)
+#post
+C_ii
+C_pi
+Heading4$(Step 9: Calculate the participation factor for the rocking system)
+γ = min(1.5; 1.5/(1 + (t/h_w)^2))
+Heading4$(Step 10: Calculate the displacement response)
+R_p = 1.0
+#hide
+D_ph = γ*(T_p/(2*π))^2*min(C_pi*R_p; 3.6)*g
+#post
+D_ph|mm
+Heading4$(Step 11: Calculate %NBS)
+NBS_i = 100*Δ_m/D_ph
+NBS = min(NBS_i)

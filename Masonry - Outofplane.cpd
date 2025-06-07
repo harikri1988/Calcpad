@@ -1,0 +1,83 @@
+#local
+#include AB Style V0.cpd
+#global
+"Wall Geometry"
+'Thickness of wall,'t_w = ? {170}mm
+'Unsupported height of wall,'h_w = ? {4.435}m
+'Restraint height,'h_w,b = ? {0}m'[Bottom] and'h_w,t = ? {4.435}m'[Top]
+'Height from the base of the structure to the uppermost seismic weight/mass,'h_parapet = ? {6.29}m
+"Material Properties"
+'Unit weight of wall,'γ_wall = ? {18}kN/m^3
+#post
+Heading4$(Step 1: Dividing the wall panel)
+'Divide the wall panel into two parts of height,'h_w/2
+'Height of wall from centroid of bottom half of panel,'Y_b = (h_w/2)/2
+'Height of wall from centroid of top half of panel,'Y_t = (h_w/2)/2
+Heading4$(Step 2: Weight of wall parts)
+tab$tab$tab$'Weight of top part is equal to weight of bottom part
+'<h5>Weight of Wall</h5>'ref$('Step 2, Page C8-93')
+#varsub
+'Weight of bottom half of wall,'W_b = γ_wall*(h_w/2)*t_w
+'Weight of top half of wall,'W_t = W_b
+'Total Weight of wall,'W_wall = W_b + W_t
+hline$
+#show
+'Weight acting on top of wall,'P = ? {5.248}kN/m
+#post
+Heading4$(Step 3: Effective thickness)
+'Nominal thickness of wall,'t_nom = t_w
+'Effective thickness of wall,'t = t_nom*(0.975 - 0.025*(P/W_wall))ref$('Eq C8B.22')
+Heading4$(Step 4: Assess the maximum eccenticities)
+'Top Eccentricity,'e_p = [0mm; 0mm; t/2; t/2]
+'Bottom Eccentricity,'e_b = [0mm; t/2; 0mm; t/2]
+Heading4$(Step 5: Calculate the mid-height deflection)
+b = [(W_wall/2 + P)*t; (W_wall + 3*P/2)*t; (W_wall/2 + 3*P/2)*t; (W_wall + 2*P)*t]
+#hide
+a = vector(4)';'fill(a; (W_wall/2 + P)*h_w)
+#post
+a
+'Mid-height deflection that would cause instability under static conditions,'
+Δ_i = (b*h_w)/(2*a)|mmref$('Eq. C8.11')
+Heading4$(Step 6: Calculate the (maximum) usable deflection)
+'Maximum usable deflection,'Δ_m = 0.6*Δ_i
+Heading4$(Step 7: Calculate the period)
+#hide
+g = 9.8067m/s^2
+#post
+'Approximate period is given by,'sqrt((0.28*(h_w/m))/(1 + 2*P/W_wall))*s
+'Rotational Inertia of the masses:'
+J = [((W_wall/12)*(h_w^2 + 7*t^2) + P*t^2)/g; ((W_wall/12)*(h_w^2 + 16*t^2) + 9*P*t^2/4)/g; ((W_wall/12)*(h_w^2 + 7*t^2) + 9*P*t^2/4)/g; ((W_wall/12)*(h_w^2 + 16*t^2) + 4*P*t^2)/g]|kg*m^2/m
+'Period of parts,'T_p = 4.07*sqrt(J/a)
+Heading4$(Step 8: Calculate Seismic Coefficients)
+h_i = h_w,t';'h_n = h_parapet
+#show
+C_h0 = ? {1.33}ref$('Table 3.1, NZS 1170.5')
+Z = ? {0.16}ref$('Cl. 3.1.4, NZS 1170.5')
+R = ? {1.0}
+N_TD = ? {1.0}
+#post
+C_0 = C_h0*Z*R*N_TD
+C_Hi(h_i) = switch(h_i < 12m; 1 + (h_i/6m); h_i < 0.2*h_n; 1 + 10*(h_i/h_n); 3.0)
+C_i(T_p) = switch(T_p < 0.5s; 2.0; _
+T_p < 1.5s; 2.0*(0.5s/T_p)^0.75; _
+T_p < 3s; 1.32s/T_p; _
+3.96s^2/T_p^2)
+C_p(T_p) = C_0*C_Hi(h_i)*C_i(T_p)
+hline$
+#hide
+C_ii = vector(4)';'$Repeat{C_ii.i = C_i(T_p.i) @ i = 1 : 4}
+C_pi = vector(4)';'$Repeat{C_pi.i = C_p(T_p.i) @ i = 1 : 4}
+#post
+C_ii
+C_pi
+Heading4$(Step 9: Calculate the participation factor for the rocking system)
+γ = (W_b*Y_b + W_t*Y_t)*h_w/(2*J*g)
+Heading4$(Step 10: Calculate the displacement response)
+R_p = 1.0
+#hide
+D_ph = vector(4)';'$Repeat{D_ph.i = γ.i*(T_p.i/(2*π))^2*min(C_pi.i*R_p; 3.6)*g @ i = 1 : 4}
+#post
+D_ph|mm
+Heading4$(Step 11: Calculate %NBS)
+NBS_i = 100*Δ_m/D_ph
+NBS = min(NBS_i)

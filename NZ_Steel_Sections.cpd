@@ -1,0 +1,1133 @@
+#global
+#hide
+E_s = 205GPa';'G_s = 80GPa
+f_y300(t) = if(t < 11mm; 320MPa; if(t < 17mm; 300MPa; 280MPa))
+M_sx(tf; S_x) = f_y300(tf)*S_x
+M_oa(E; G; I; J; Iw; L) = sqrt((π^2*E*I/L^2)*(G*J + (π^2*E*Iw/L^2)))
+α_s,steel(tf; S_x; E; G; I; J; Iw; L) = min(1.0; 0.6*(sqrt((M_sx(tf; S_x)/M_oa(E; G; I; J; Iw; L))^2 + 3) - (M_sx(tf; S_x)/M_oa(E; G; I; J; Iw; L))))
+φM_n,steel(tf; S_x; E; G; I; J; Iw; L) = 0.9*α_s,steel(tf; S_x; E; G; I; J; Iw; L)*M_sx(tf; S_x)
+#show
+#hide
+#def PFC380x100$
+	#hide
+	d_PFC380x100 = 380mm
+	bf_PFC380x100 = 100mm
+	tf_PFC380x100 = 17.5mm
+	tw_PFC380x100 = 10.0mm
+	r1_PFC380x100 = 14mm
+	d1_PFC380x100 = 345mm
+	Ag_PFC380x100 = 7030mm^2
+	Ix_PFC380x100 = 152*10^6*mm^4
+	Zx_PFC380x100 = 798*10^3*mm^3
+	Sx_PFC380x100 = 946mm
+	rx_PFC380x100 = 147.0mm
+	Iy_PFC380x100 = 6.48*10^6*mm^4
+	ry_PFC380x100 = 30.4mm
+	J_PFC380x100 = 472.0*10^3*mm^4
+	Iw_PFC380x100 = 151.00*10^9*mm^6
+	#show
+#end def
+
+#def PFC300x90$
+	#hide
+	d_PFC300x90 = 300mm
+	bf_PFC300x90 = 90mm
+	tf_PFC300x90 = 16.0mm
+	tw_PFC300x90 = 8.0mm
+	r1_PFC300x90 = 14mm
+	d1_PFC300x90 = 268mm
+	Ag_PFC300x90 = 5110mm^2
+	Ix_PFC300x90 = 72.4*10^6*mm^4
+	Zx_PFC300x90 = 483*10^3*mm^3
+	Sx_PFC300x90 = 564mm
+	rx_PFC300x90 = 119.0mm
+	Iy_PFC300x90 = 4.04*10^6*mm^4
+	ry_PFC300x90 = 28.1mm
+	J_PFC300x90 = 290.0*10^3*mm^4
+	Iw_PFC300x90 = 58.20*10^9*mm^6
+	#show
+#end def
+
+#def PFC250x90$
+	#hide
+	d_PFC250x90 = 250mm
+	bf_PFC250x90 = 90mm
+	tf_PFC250x90 = 15.0mm
+	tw_PFC250x90 = 8.0mm
+	r1_PFC250x90 = 12mm
+	d1_PFC250x90 = 220mm
+	Ag_PFC250x90 = 4520mm^2
+	Ix_PFC250x90 = 45.1*10^6*mm^4
+	Zx_PFC250x90 = 361*10^3*mm^3
+	Sx_PFC250x90 = 421mm
+	rx_PFC250x90 = 99.9mm
+	Iy_PFC250x90 = 3.64*10^6*mm^4
+	ry_PFC250x90 = 28.4mm
+	J_PFC250x90 = 238.0*10^3*mm^4
+	Iw_PFC250x90 = 35.90*10^9*mm^6
+	#show
+#end def
+
+#def PFC230x75$
+	#hide
+	d_PFC230x75 = 230mm
+	bf_PFC230x75 = 75mm
+	tf_PFC230x75 = 12.0mm
+	tw_PFC230x75 = 6.5mm
+	r1_PFC230x75 = 12mm
+	d1_PFC230x75 = 206mm
+	Ag_PFC230x75 = 3200mm^2
+	Ix_PFC230x75 = 26.8*10^6*mm^4
+	Zx_PFC230x75 = 233*10^3*mm^3
+	Sx_PFC230x75 = 271mm
+	rx_PFC230x75 = 91.4mm
+	Iy_PFC230x75 = 1.76*10^6*mm^4
+	ry_PFC230x75 = 23.5mm
+	J_PFC230x75 = 108.0*10^3*mm^4
+	Iw_PFC230x75 = 15.00*10^9*mm^6
+	#show
+#end def
+
+#def PFC200x75$
+	#hide
+	d_PFC200x75 = 200mm
+	bf_PFC200x75 = 75mm
+	tf_PFC200x75 = 12.0mm
+	tw_PFC200x75 = 6.0mm
+	r1_PFC200x75 = 12mm
+	d1_PFC200x75 = 176mm
+	Ag_PFC200x75 = 2920mm^2
+	Ix_PFC200x75 = 19.1*10^6*mm^4
+	Zx_PFC200x75 = 191*10^3*mm^3
+	Sx_PFC200x75 = 221mm
+	rx_PFC200x75 = 80.9mm
+	Iy_PFC200x75 = 1.65*10^6*mm^4
+	ry_PFC200x75 = 23.8mm
+	J_PFC200x75 = 101.0*10^3*mm^4
+	Iw_PFC200x75 = 10.60*10^9*mm^6
+	#show
+#end def
+
+#def PFC180x75$
+	#hide
+	d_PFC180x75 = 180mm
+	bf_PFC180x75 = 75mm
+	tf_PFC180x75 = 11.0mm
+	tw_PFC180x75 = 6.0mm
+	r1_PFC180x75 = 12mm
+	d1_PFC180x75 = 158mm
+	Ag_PFC180x75 = 2660mm^2
+	Ix_PFC180x75 = 14.1*10^6*mm^4
+	Zx_PFC180x75 = 157*10^3*mm^3
+	Sx_PFC180x75 = 182mm
+	rx_PFC180x75 = 72.9mm
+	Iy_PFC180x75 = 1.51*10^6*mm^4
+	ry_PFC180x75 = 23.8mm
+	J_PFC180x75 = 81.4*10^3*mm^4
+	Iw_PFC180x75 = 7.82*10^9*mm^6
+	#show
+#end def
+
+#def PFC150x75$
+	#hide
+	d_PFC150x75 = 150mm
+	bf_PFC150x75 = 75mm
+	tf_PFC150x75 = 9.5mm
+	tw_PFC150x75 = 6.0mm
+	r1_PFC150x75 = 10mm
+	d1_PFC150x75 = 131mm
+	Ag_PFC150x75 = 2250mm^2
+	Ix_PFC150x75 = 8.34*10^6*mm^4
+	Zx_PFC150x75 = 111*10^3*mm^3
+	Sx_PFC150x75 = 129mm
+	rx_PFC150x75 = 60.8mm
+	Iy_PFC150x75 = 1.29*10^6*mm^4
+	ry_PFC150x75 = 23.9mm
+	J_PFC150x75 = 54.9*10^3*mm^4
+	Iw_PFC150x75 = 4.59*10^9*mm^6
+	#show
+#end def
+
+#def PFC125x65$
+	#hide
+	d_PFC125x65 = 125mm
+	bf_PFC125x65 = 65mm
+	tf_PFC125x65 = 7.5mm
+	tw_PFC125x65 = 4.7mm
+	r1_PFC125x65 = 8mm
+	d1_PFC125x65 = 110mm
+	Ag_PFC125x65 = 1520mm^2
+	Ix_PFC125x65 = 3.97*10^6*mm^4
+	Zx_PFC125x65 = 63.5*10^3*mm^3
+	Sx_PFC125x65 = 73mm
+	rx_PFC125x65 = 51.1mm
+	Iy_PFC125x65 = 0.658*10^6*mm^4
+	ry_PFC125x65 = 20.8mm
+	J_PFC125x65 = 23.1*10^3*mm^4
+	Iw_PFC125x65 = 1.64*10^9*mm^6
+	#show
+#end def
+
+#def PFC100x50$
+	#hide
+	d_PFC100x50 = 100mm
+	bf_PFC100x50 = 50mm
+	tf_PFC100x50 = 6.7mm
+	tw_PFC100x50 = 4.2mm
+	r1_PFC100x50 = 8mm
+	d1_PFC100x50 = 86.6mm
+	Ag_PFC100x50 = 1060mm^2
+	Ix_PFC100x50 = 1.74*10^6*mm^4
+	Zx_PFC100x50 = 34.7*10^3*mm^3
+	Sx_PFC100x50 = 40.3mm
+	rx_PFC100x50 = 40.4mm
+	Iy_PFC100x50 = 0.267*10^6*mm^4
+	ry_PFC100x50 = 15.9mm
+	J_PFC100x50 = 13.2*10^3*mm^4
+	Iw_PFC100x50 = 0.424*10^9*mm^6
+	#show
+#end def
+
+#def PFC75x40$
+	#hide
+	d_PFC75x40 = 75mm
+	bf_PFC75x40 = 40mm
+	tf_PFC75x40 = 6.1mm
+	tw_PFC75x40 = 3.8mm
+	r1_PFC75x40 = 8mm
+	d1_PFC75x40 = 62.8mm
+	Ag_PFC75x40 = 754mm^2
+	Ix_PFC75x40 = 0.683*10^6*mm^4
+	Zx_PFC75x40 = 18.2*10^3*mm^3
+	Sx_PFC75x40 = 21.4mm
+	rx_PFC75x40 = 30.1mm
+	Iy_PFC75x40 = 0.12*10^6*mm^4
+	ry_PFC75x40 = 12.6mm
+	J_PFC75x40 = 8.13*10^3*mm^4
+	Iw_PFC75x40 = 0.106*10^9*mm^6
+	#show
+#end def
+
+#def UB610x125$
+	#hide
+	d_UB610x125 = 612mm
+	bf_UB610x125 = 229mm
+	tf_UB610x125 = 19.6mm
+	tw_UB610x125 = 11.9mm
+	r1_UB610x125 = 14.0mm
+	d1_UB610x125 = 572mm
+	Ag_UB610x125 = 16000mm^2
+	Ix_UB610x125 = 986.00*10^6*mm^4
+	Zx_UB610x125 = 3230*10^3*mm^3
+	Sx_UB610x125 = 3680*10^3*mm^3
+	rx_UB610x125 = 249.0mm
+	IyUB610x125 = 39.300*10^6*mm^4
+	Zy_UB610x125 = 343.0*10^3*mm^3
+	Sy_UB610x125 = 536.0*10^3*mm^3
+	ry_UB610x125 = 49.6mm
+	J_UB610x125 = 1560.0*10^3*mm^4
+	Iw_UB610x125 = 3450.00*10^9*mm^6
+	#show
+#end def
+ 
+#def UB610x113$
+	#hide
+	d_UB610x113 = 607mm
+	bf_UB610x113 = 228mm
+	tf_UB610x113 = 17.3mm
+	tw_UB610x113 = 11.2mm
+	r1_UB610x113 = 14.0mm
+	d1_UB610x113 = 572mm
+	Ag_UB610x113 = 14500mm^2
+	Ix_UB610x113 = 875.00*10^6*mm^4
+	Zx_UB610x113 = 2880*10^3*mm^3
+	Sx_UB610x113 = 3290*10^3*mm^3
+	rx_UB610x113 = 246.0mm
+	IyUB610x113 = 34.300*10^6*mm^4
+	Zy_UB610x113 = 300.0*10^3*mm^3
+	Sy_UB610x113 = 469.0*10^3*mm^3
+	ry_UB610x113 = 48.7mm
+	J_UB610x113 = 1140.0*10^3*mm^4
+	Iw_UB610x113 = 2980.00*10^9*mm^6
+	#show
+#end def
+ 
+#def UB610x101$
+	#hide
+	d_UB610x101 = 602mm
+	bf_UB610x101 = 228mm
+	tf_UB610x101 = 14.8mm
+	tw_UB610x101 = 10.6mm
+	r1_UB610x101 = 14.0mm
+	d1_UB610x101 = 572mm
+	Ag_UB610x101 = 13000mm^2
+	Ix_UB610x101 = 761.00*10^6*mm^4
+	Zx_UB610x101 = 2530*10^3*mm^3
+	Sx_UB610x101 = 2900*10^3*mm^3
+	rx_UB610x101 = 242.0mm
+	IyUB610x101 = 29.300*10^6*mm^4
+	Zy_UB610x101 = 257.0*10^3*mm^3
+	Sy_UB610x101 = 402.0*10^3*mm^3
+	ry_UB610x101 = 47.5mm
+	J_UB610x101 = 790.0*10^3*mm^4
+	Iw_UB610x101 = 2530.00*10^9*mm^6
+	#show
+#end def
+ 
+#def UB530x92$
+	#hide
+	d_UB530x92 = 533mm
+	bf_UB530x92 = 209mm
+	tf_UB530x92 = 15.6mm
+	tw_UB530x92 = 10.2mm
+	r1_UB530x92 = 14.0mm
+	d1_UB530x92 = 502mm
+	Ag_UB530x92 = 11800mm^2
+	Ix_UB530x92 = 554.00*10^6*mm^4
+	Zx_UB530x92 = 2080*10^3*mm^3
+	Sx_UB530x92 = 2370*10^3*mm^3
+	rx_UB530x92 = 217.0mm
+	IyUB530x92 = 23.800*10^6*mm^4
+	Zy_UB530x92 = 228.0*10^3*mm^3
+	Sy_UB530x92 = 355.0*10^3*mm^3
+	ry_UB530x92 = 44.9mm
+	J_UB530x92 = 775.0*10^3*mm^4
+	Iw_UB530x92 = 1590.00*10^9*mm^6
+	#show
+#end def
+ 
+#def UB530x82$
+	#hide
+	d_UB530x82 = 528mm
+	bf_UB530x82 = 209mm
+	tf_UB530x82 = 13.2mm
+	tw_UB530x82 = 9.6mm
+	r1_UB530x82 = 14.0mm
+	d1_UB530x82 = 502mm
+	Ag_UB530x82 = 10500mm^2
+	Ix_UB530x82 = 477.00*10^6*mm^4
+	Zx_UB530x82 = 1810*10^3*mm^3
+	Sx_UB530x82 = 2070*10^3*mm^3
+	rx_UB530x82 = 213.0mm
+	IyUB530x82 = 20.100*10^6*mm^4
+	Zy_UB530x82 = 193.0*10^3*mm^3
+	Sy_UB530x82 = 301.0*10^3*mm^3
+	ry_UB530x82 = 43.8mm
+	J_UB530x82 = 526.0*10^3*mm^4
+	Iw_UB530x82 = 1330.00*10^9*mm^6
+	#show
+#end def
+ 
+#def UB460x82$
+	#hide
+	d_UB460x82 = 460mm
+	bf_UB460x82 = 191mm
+	tf_UB460x82 = 16.0mm
+	tw_UB460x82 = 9.9mm
+	r1_UB460x82 = 11.4mm
+	d1_UB460x82 = 428mm
+	Ag_UB460x82 = 10500mm^2
+	Ix_UB460x82 = 372.00*10^6*mm^4
+	Zx_UB460x82 = 1610*10^3*mm^3
+	Sx_UB460x82 = 1840*10^3*mm^3
+	rx_UB460x82 = 188.0mm
+	IyUB460x82 = 18.600*10^6*mm^4
+	Zy_UB460x82 = 195.0*10^3*mm^3
+	Sy_UB460x82 = 303.0*10^3*mm^3
+	ry_UB460x82 = 42.2mm
+	J_UB460x82 = 701.0*10^3*mm^4
+	Iw_UB460x82 = 919.00*10^9*mm^6
+	#show
+#end def
+ 
+#def UB460x75$
+	#hide
+	d_UB460x75 = 457mm
+	bf_UB460x75 = 190mm
+	tf_UB460x75 = 14.5mm
+	tw_UB460x75 = 9.1mm
+	r1_UB460x75 = 11.4mm
+	d1_UB460x75 = 428mm
+	Ag_UB460x75 = 9520mm^2
+	Ix_UB460x75 = 335.00*10^6*mm^4
+	Zx_UB460x75 = 1460*10^3*mm^3
+	Sx_UB460x75 = 1660*10^3*mm^3
+	rx_UB460x75 = 188.0mm
+	IyUB460x75 = 16.600*10^6*mm^4
+	Zy_UB460x75 = 175.0*10^3*mm^3
+	Sy_UB460x75 = 271.0*10^3*mm^3
+	ry_UB460x75 = 41.8mm
+	J_UB460x75 = 530.0*10^3*mm^4
+	Iw_UB460x75 = 815.00*10^9*mm^6
+	#show
+#end def
+ 
+#def UB460x67$
+	#hide
+	d_UB460x67 = 454mm
+	bf_UB460x67 = 190mm
+	tf_UB460x67 = 12.7mm
+	tw_UB460x67 = 8.5mm
+	r1_UB460x67 = 11.4mm
+	d1_UB460x67 = 428mm
+	Ag_UB460x67 = 8580mm^2
+	Ix_UB460x67 = 296.00*10^6*mm^4
+	Zx_UB460x67 = 1300*10^3*mm^3
+	Sx_UB460x67 = 1480*10^3*mm^3
+	rx_UB460x67 = 186.0mm
+	IyUB460x67 = 14.500*10^6*mm^4
+	Zy_UB460x67 = 153.0*10^3*mm^3
+	Sy_UB460x67 = 238.0*10^3*mm^3
+	ry_UB460x67 = 41.2mm
+	J_UB460x67 = 378.0*10^3*mm^4
+	Iw_UB460x67 = 708.00*10^9*mm^6
+	#show
+#end def
+ 
+#def UB410x60$
+	#hide
+	d_UB410x60 = 406mm
+	bf_UB410x60 = 178mm
+	tf_UB410x60 = 12.8mm
+	tw_UB410x60 = 7.8mm
+	r1_UB410x60 = 11.4mm
+	d1_UB410x60 = 381mm
+	Ag_UB410x60 = 7640mm^2
+	Ix_UB410x60 = 216.00*10^6*mm^4
+	Zx_UB410x60 = 1060*10^3*mm^3
+	Sx_UB410x60 = 1200*10^3*mm^3
+	rx_UB410x60 = 168.0mm
+	IyUB410x60 = 12.100*10^6*mm^4
+	Zy_UB410x60 = 135.0*10^3*mm^3
+	Sy_UB410x60 = 209.0*10^3*mm^3
+	ry_UB410x60 = 39.7mm
+	J_UB410x60 = 337.0*10^3*mm^4
+	Iw_UB410x60 = 467.00*10^9*mm^6
+	#show
+#end def
+ 
+#def UB410x54$
+	#hide
+	d_UB410x54 = 403mm
+	bf_UB410x54 = 178mm
+	tf_UB410x54 = 10.9mm
+	tw_UB410x54 = 7.6mm
+	r1_UB410x54 = 11.4mm
+	d1_UB410x54 = 381mm
+	Ag_UB410x54 = 6890mm^2
+	Ix_UB410x54 = 188.00*10^6*mm^4
+	Zx_UB410x54 = 933*10^3*mm^3
+	Sx_UB410x54 = 1060*10^3*mm^3
+	rx_UB410x54 = 165.0mm
+	IyUB410x54 = 10.300*10^6*mm^4
+	Zy_UB410x54 = 115.0*10^3*mm^3
+	Sy_UB410x54 = 179.0*10^3*mm^3
+	ry_UB410x54 = 38.6mm
+	J_UB410x54 = 234.0*10^3*mm^4
+	Iw_UB410x54 = 394.00*10^9*mm^6
+	#show
+#end def
+ 
+#def UB360x57$
+	#hide
+	d_UB360x57 = 359mm
+	bf_UB360x57 = 172mm
+	tf_UB360x57 = 13.0mm
+	tw_UB360x57 = 8.0mm
+	r1_UB360x57 = 11.4mm
+	d1_UB360x57 = 333mm
+	Ag_UB360x57 = 7240mm^2
+	Ix_UB360x57 = 161.00*10^6*mm^4
+	Zx_UB360x57 = 899*10^3*mm^3
+	Sx_UB360x57 = 1010*10^3*mm^3
+	rx_UB360x57 = 149.0mm
+	IyUB360x57 = 11.000*10^6*mm^4
+	Zy_UB360x57 = 128.0*10^3*mm^3
+	Sy_UB360x57 = 198.0*10^3*mm^3
+	ry_UB360x57 = 39.0mm
+	J_UB360x57 = 338.0*10^3*mm^4
+	Iw_UB360x57 = 330.00*10^9*mm^6
+	#show
+#end def
+ 
+#def UB360x51$
+	#hide
+	d_UB360x51 = 356mm
+	bf_UB360x51 = 171mm
+	tf_UB360x51 = 11.5mm
+	tw_UB360x51 = 7.3mm
+	r1_UB360x51 = 11.4mm
+	d1_UB360x51 = 333mm
+	Ag_UB360x51 = 6470mm^2
+	Ix_UB360x51 = 142.00*10^6*mm^4
+	Zx_UB360x51 = 798*10^3*mm^3
+	Sx_UB360x51 = 897*10^3*mm^3
+	rx_UB360x51 = 148.0mm
+	IyUB360x51 = 9.600*10^6*mm^4
+	Zy_UB360x51 = 112.0*10^3*mm^3
+	Sy_UB360x51 = 173.0*10^3*mm^3
+	ry_UB360x51 = 38.5mm
+	J_UB360x51 = 241.0*10^3*mm^4
+	Iw_UB360x51 = 284.00*10^9*mm^6
+	#show
+#end def
+ 
+#def UB360x45$
+	#hide
+	d_UB360x45 = 352mm
+	bf_UB360x45 = 171mm
+	tf_UB360x45 = 9.7mm
+	tw_UB360x45 = 6.9mm
+	r1_UB360x45 = 11.4mm
+	d1_UB360x45 = 333mm
+	Ag_UB360x45 = 5720mm^2
+	Ix_UB360x45 = 121.00*10^6*mm^4
+	Zx_UB360x45 = 689*10^3*mm^3
+	Sx_UB360x45 = 777*10^3*mm^3
+	rx_UB360x45 = 146.0mm
+	IyUB360x45 = 8.100*10^6*mm^4
+	Zy_UB360x45 = 94.7*10^3*mm^3
+	Sy_UB360x45 = 146.0*10^3*mm^3
+	ry_UB360x45 = 37.6mm
+	J_UB360x45 = 161.0*10^3*mm^4
+	Iw_UB360x45 = 237.00*10^9*mm^6
+	#show
+#end def
+ 
+#def UB310x46$
+	#hide
+	d_UB310x46 = 307mm
+	bf_UB310x46 = 166mm
+	tf_UB310x46 = 11.8mm
+	tw_UB310x46 = 6.7mm
+	r1_UB310x46 = 11.4mm
+	d1_UB310x46 = 284mm
+	Ag_UB310x46 = 5930mm^2
+	Ix_UB310x46 = 100.00*10^6*mm^4
+	Zx_UB310x46 = 651*10^3*mm^3
+	Sx_UB310x46 = 729*10^3*mm^3
+	rx_UB310x46 = 130.0mm
+	IyUB310x46 = 9.01*10^6*mm^4
+	Zy_UB310x46 = 109.0*10^3*mm^3
+	Sy_UB310x46 = 166.0*10^3*mm^3
+	ry_UB310x46 = 39.0mm
+	J_UB310x46 = 233.0*10^3*mm^4
+	Iw_UB310x46 = 197.00*10^9*mm^6
+	#show
+#end def
+ 
+#def UB310x40$
+	#hide
+	d_UB310x40 = 304mm
+	bf_UB310x40 = 165mm
+	tf_UB310x40 = 10.2mm
+	tw_UB310x40 = 6.1mm
+	r1_UB310x40 = 11.4mm
+	d1_UB310x40 = 284mm
+	Ag_UB310x40 = 5210mm^2
+	Ix_UB310x40 = 86.40*10^6*mm^4
+	Zx_UB310x40 = 569*10^3*mm^3
+	Sx_UB310x40 = 633*10^3*mm^3
+	rx_UB310x40 = 129.0mm
+	IyUB310x40 = 7.650*10^6*mm^4
+	Zy_UB310x40 = 92.7*10^3*mm^3
+	Sy_UB310x40 = 142.0*10^3*mm^3
+	ry_UB310x40 = 38.3mm
+	J_UB310x40 = 157.0*10^3*mm^4
+	Iw_UB310x40 = 165.00*10^9*mm^6
+	#show
+#end def
+ 
+#def UB310x32$
+	#hide
+	d_UB310x32 = 298mm
+	bf_UB310x32 = 149mm
+	tf_UB310x32 = 8.0mm
+	tw_UB310x32 = 5.5mm
+	r1_UB310x32 = 13.0mm
+	d1_UB310x32 = 282mm
+	Ag_UB310x32 = 4080mm^2
+	Ix_UB310x32 = 63.20*10^6*mm^4
+	Zx_UB310x32 = 424*10^3*mm^3
+	Sx_UB310x32 = 475*10^3*mm^3
+	rx_UB310x32 = 124.0mm
+	IyUB310x32 = 4.420*10^6*mm^4
+	Zy_UB310x32 = 59.3*10^3*mm^3
+	Sy_UB310x32 = 91.8*10^3*mm^3
+	ry_UB310x32 = 32.9mm
+	J_UB310x32 = 86.5*10^3*mm^4
+	Iw_UB310x32 = 92.90*10^9*mm^6
+	#show
+#end def
+ 
+#def UB250x37$
+	#hide
+	d_UB250x37 = 256mm
+	bf_UB250x37 = 146mm
+	tf_UB250x37 = 10.9mm
+	tw_UB250x37 = 6.4mm
+	r1_UB250x37 = 8.9mm
+	d1_UB250x37 = 234mm
+	Ag_UB250x37 = 4750mm^2
+	Ix_UB250x37 = 55.70*10^6*mm^4
+	Zx_UB250x37 = 435*10^3*mm^3
+	Sx_UB250x37 = 486*10^3*mm^3
+	rx_UB250x37 = 108.0mm
+	IyUB250x37 = 5.660*10^6*mm^4
+	Zy_UB250x37 = 77.5*10^3*mm^3
+	Sy_UB250x37 = 119.0*10^3*mm^3
+	ry_UB250x37 = 34.5mm
+	J_UB250x37 = 158.0*10^3*mm^4
+	Iw_UB250x37 = 85.20*10^9*mm^6
+	#show
+#end def
+ 
+#def UB250x31$
+	#hide
+	d_UB250x31 = 252mm
+	bf_UB250x31 = 146mm
+	tf_UB250x31 = 8.6mm
+	tw_UB250x31 = 6.1mm
+	r1_UB250x31 = 8.9mm
+	d1_UB250x31 = 234mm
+	Ag_UB250x31 = 4010mm^2
+	Ix_UB250x31 = 44.50*10^6*mm^4
+	Zx_UB250x31 = 354*10^3*mm^3
+	Sx_UB250x31 = 397*10^3*mm^3
+	rx_UB250x31 = 105.0mm
+	IyUB250x31 = 4.470*10^6*mm^4
+	Zy_UB250x31 = 61.2*10^3*mm^3
+	Sy_UB250x31 = 94.2*10^3*mm^3
+	ry_UB250x31 = 33.4mm
+	J_UB250x31 = 89.3*10^3*mm^4
+	Iw_UB250x31 = 65.90*10^9*mm^6
+	#show
+#end def
+ 
+#def UB250x26$
+	#hide
+	d_UB250x26 = 248mm
+	bf_UB250x26 = 124mm
+	tf_UB250x26 = 8.0mm
+	tw_UB250x26 = 5.0mm
+	r1_UB250x26 = 12.0mm
+	d1_UB250x26 = 232mm
+	Ag_UB250x26 = 3270mm^2
+	Ix_UB250x26 = 35.4*10^6*mm^4
+	Zx_UB250x26 = 285*10^3*mm^3
+	Sx_UB250x26 = 319*10^3*mm^3
+	rx_UB250x26 = 104.0mm
+	IyUB250x26 = 2.550*10^6*mm^4
+	Zy_UB250x26 = 41.1*10^3*mm^3
+	Sy_UB250x26 = 63.6*10^3*mm^3
+	ry_UB250x26 = 27.9mm
+	J_UB250x26 = 67.4*10^3*mm^4
+	Iw_UB250x26 = 36.7*10^9*mm^6
+	#show
+#end def
+ 
+#def UB200x30$
+	#hide
+	d_UB200x30 = 207mm
+	bf_UB200x30 = 134mm
+	tf_UB200x30 = 9.6mm
+	tw_UB200x30 = 6.3mm
+	r1_UB200x30 = 8.9mm
+	d1_UB200x30 = 188mm
+	Ag_UB200x30 = 3820mm^2
+	Ix_UB200x30 = 29.10*10^6*mm^4
+	Zx_UB200x30 = 281*10^3*mm^3
+	Sx_UB200x30 = 316*10^3*mm^3
+	rx_UB200x30 = 87.3mm
+	IyUB200x30 = 3.860*10^6*mm^4
+	Zy_UB200x30 = 57.5*10^3*mm^3
+	Sy_UB200x30 = 88.4*10^3*mm^3
+	ry_UB200x30 = 31.8mm
+	J_UB200x30 = 105.0*10^3*mm^4
+	Iw_UB200x30 = 37.60*10^9*mm^6
+	#show
+#end def
+ 
+#def UB200x25$
+	#hide
+	d_UB200x25 = 203mm
+	bf_UB200x25 = 133mm
+	tf_UB200x25 = 7.8mm
+	tw_UB200x25 = 5.8mm
+	r1_UB200x25 = 8.9mm
+	d1_UB200x25 = 188mm
+	Ag_UB200x25 = 3230mm^2
+	Ix_UB200x25 = 23.60*10^6*mm^4
+	Zx_UB200x25 = 232*10^3*mm^3
+	Sx_UB200x25 = 260*10^3*mm^3
+	rx_UB200x25 = 85.4mm
+	IyUB200x25 = 3.060*10^6*mm^4
+	Zy_UB200x25 = 46.1*10^3*mm^3
+	Sy_UB200x25 = 70.9*10^3*mm^3
+	ry_UB200x25 = 30.8mm
+	J_UB200x25 = 62.7*10^3*mm^4
+	Iw_UB200x25 = 29.20*10^9*mm^6
+	#show
+#end def
+ 
+#def UB200x22$
+	#hide
+	d_UB200x22 = 202mm
+	bf_UB200x22 = 133mm
+	tf_UB200x22 = 7.0mm
+	tw_UB200x22 = 5.0mm
+	r1_UB200x22 = 8.9mm
+	d1_UB200x22 = 188mm
+	Ag_UB200x22 = 2870mm^2
+	Ix_UB200x22 = 21.00*10^6*mm^4
+	Zx_UB200x22 = 208*10^3*mm^3
+	Sx_UB200x22 = 231*10^3*mm^3
+	rx_UB200x22 = 85.5mm
+	IyUB200x22 = 2.750*10^6*mm^4
+	Zy_UB200x22 = 41.3*10^3*mm^3
+	Sy_UB200x22 = 63.4*10^3*mm^3
+	ry_UB200x22 = 31.0mm
+	J_UB200x22 = 45.0*10^3*mm^4
+	Iw_UB200x22 = 26.00*10^9*mm^6
+	#show
+#end def
+ 
+#def UB200x18$
+	#hide
+	d_UB200x18 = 198mm
+	bf_UB200x18 = 99mm
+	tf_UB200x18 = 7.0mm
+	tw_UB200x18 = 4.5mm
+	r1_UB200x18 = 11.0mm
+	d1_UB200x18 = 184mm
+	Ag_UB200x18 = 2320mm^2
+	Ix_UB200x18 = 15.80*10^6*mm^4
+	Zx_UB200x18 = 160*10^3*mm^3
+	Sx_UB200x18 = 180*10^3*mm^3
+	rx_UB200x18 = 82.6mm
+	IyUB200x18 = 1.140*10^6*mm^4
+	Zy_UB200x18 = 23.0*10^3*mm^3
+	Sy_UB200x18 = 35.7*10^3*mm^3
+	ry_UB200x18 = 22.1mm
+	J_UB200x18 = 38.6*10^3*mm^4
+	Iw_UB200x18 = 10.40*10^9*mm^6
+	#show
+#end def
+ 
+#def UB180x22$
+	#hide
+	d_UB180x22 = 179mm
+	bf_UB180x22 = 90mm
+	tf_UB180x22 = 10.0mm
+	tw_UB180x22 = 6.0mm
+	r1_UB180x22 = 8.9mm
+	d1_UB180x22 = 159mm
+	Ag_UB180x22 = 2820mm^2
+	Ix_UB180x22 = 15.30*10^6*mm^4
+	Zx_UB180x22 = 171*10^3*mm^3
+	Sx_UB180x22 = 195*10^3*mm^3
+	rx_UB180x22 = 73.6mm
+	IyUB180x22 = 1.220*10^6*mm^4
+	Zy_UB180x22 = 27.1*10^3*mm^3
+	Sy_UB180x22 = 42.3*10^3*mm^3
+	ry_UB180x22 = 20.8mm
+	J_UB180x22 = 81.6*10^3*mm^4
+	Iw_UB180x22 = 8.71*10^9*mm^6
+	#show
+#end def
+ 
+#def UB180x18$
+	#hide
+	d_UB180x18 = 175mm
+	bf_UB180x18 = 90mm
+	tf_UB180x18 = 8.0mm
+	tw_UB180x18 = 5.0mm
+	r1_UB180x18 = 8.9mm
+	d1_UB180x18 = 159mm
+	Ag_UB180x18 = 2300mm^2
+	Ix_UB180x18 = 12.10*10^6*mm^4
+	Zx_UB180x18 = 139*10^3*mm^3
+	Sx_UB180x18 = 157*10^3*mm^3
+	rx_UB180x18 = 72.6mm
+	IyUB180x18 = 0.975*10^6*mm^4
+	Zy_UB180x18 = 21.7*10^3*mm^3
+	Sy_UB180x18 = 33.7*10^3*mm^3
+	ry_UB180x18 = 20.6mm
+	J_UB180x18 = 44.8*10^3*mm^4
+	Iw_UB180x18 = 6.80*10^9*mm^6
+	#show
+#end def
+ 
+#def UB180x16$
+	#hide
+	d_UB180x16 = 173mm
+	bf_UB180x16 = 90mm
+	tf_UB180x16 = 7.0mm
+	tw_UB180x16 = 4.5mm
+	r1_UB180x16 = 8.9mm
+	d1_UB180x16 = 159mm
+	Ag_UB180x16 = 2040mm^2
+	Ix_UB180x16 = 10.60*10^6*mm^4
+	Zx_UB180x16 = 123*10^3*mm^3
+	Sx_UB180x16 = 138*10^3*mm^3
+	rx_UB180x16 = 72.0mm
+	IyUB180x16 = 0.853*10^6*mm^4
+	Zy_UB180x16 = 19.0*10^3*mm^3
+	Sy_UB180x16 = 29.4*10^3*mm^3
+	ry_UB180x16 = 20.4mm
+	J_UB180x16 = 31.5*10^3*mm^4
+	Iw_UB180x16 = 5.88*10^9*mm^6
+	#show
+#end def
+ 
+#def UB150x18$
+	#hide
+	d_UB150x18 = 155mm
+	bf_UB150x18 = 75mm
+	tf_UB150x18 = 9.5mm
+	tw_UB150x18 = 6.0mm
+	r1_UB150x18 = 8.0mm
+	d1_UB150x18 = 136mm
+	Ag_UB150x18 = 2300mm^2
+	Ix_UB150x18 = 9.05*10^6*mm^4
+	Zx_UB150x18 = 117*10^3*mm^3
+	Sx_UB150x18 = 135*10^3*mm^3
+	rx_UB150x18 = 62.8mm
+	IyUB150x18 = 0.672*10^6*mm^4
+	Zy_UB150x18 = 17.9*10^3*mm^3
+	Sy_UB150x18 = 28.2*10^3*mm^3
+	ry_UB150x18 = 17.1mm
+	J_UB150x18 = 60.5*10^3*mm^4
+	Iw_UB150x18 = 3.56*10^9*mm^6
+	#show
+#end def
+ 
+#def UB150x14$
+	#hide
+	d_UB150x14 = 150mm
+	bf_UB150x14 = 75mm
+	tf_UB150x14 = 7.0mm
+	tw_UB150x14 = 5.0mm
+	r1_UB150x14 = 8.0mm
+	d1_UB150x14 = 136mm
+	Ag_UB150x14 = 1780mm^2
+	Ix_UB150x14 = 6.66*10^6*mm^4
+	Zx_UB150x14 = 88.8*10^3*mm^3
+	Sx_UB150x14 = 102*10^3*mm^3
+	rx_UB150x14 = 61.1mm
+	IyUB150x14 = 0.495*10^6*mm^4
+	Zy_UB150x14 = 13.2*10^3*mm^3
+	Sy_UB150x14 = 20.8*10^3*mm^3
+	ry_UB150x14 = 16.6mm
+	J_UB150x14 = 28.1*10^3*mm^4
+	Iw_UB150x14 = 2.53*10^9*mm^6
+	#show
+#end def
+
+#def UC310x158$
+	#hide
+	d_UC310x158 = 327mm
+	bf_UC310x158 = 311mm
+	tf_UC310x158 = 25.0mm
+	tw_UC310x158 = 15.7mm
+	r1_UC310x158 = 16.5mm
+	d1_UC310x158 = 277mm
+	Ag_UC310x158 = 20100mm^2
+	Ix_UC310x158 = 388.00*10^6*mm^4
+	Zx_UC310x158 = 2370.0*10^3*mm^3
+	Sx_UC310x158 = 2680.0*10^3*mm^3
+	rx_UC310x158 = 139.0mm
+	Iy_UC310x158 = 125.00*10^6*mm^4
+	Zy_UC310x158 = 807.0*10^3*mm^3
+	Sy_UC310x158 = 1230.0*10^3*mm^3
+	ry_UC310x158 = 78.9mm
+	J_UC310x158 = 3810.0*10^3*mm^4
+	Iw_UC310x158 = 2860.0*10^9*mm^6
+	#show
+#end def
+ 
+#def UC310x137$
+	#hide
+	d_UC310x137 = 321mm
+	bf_UC310x137 = 309mm
+	tf_UC310x137 = 21.7mm
+	tw_UC310x137 = 13.8mm
+	r1_UC310x137 = 16.5mm
+	d1_UC310x137 = 277mm
+	Ag_UC310x137 = 17500mm^2
+	Ix_UC310x137 = 329.00*10^6*mm^4
+	Zx_UC310x137 = 2050.0*10^3*mm^3
+	Sx_UC310x137 = 2300.0*10^3*mm^3
+	rx_UC310x137 = 137.0mm
+	IyUC310x137 = 107.00*10^6*mm^4
+	Zy_UC310x137 = 691.0*10^3*mm^3
+	Sy_UC310x137 = 1050.0*10^3*mm^3
+	ry_UC310x137 = 78.2mm
+	J_UC310x137 = 2520.0*10^3*mm^4
+	Iw_UC310x137 = 2390.0*10^9*mm^6
+	#show
+#end def
+ 
+#def UC310x118$
+	#hide
+	d_UC310x118 = 315mm
+	bf_UC310x118 = 307mm
+	tf_UC310x118 = 18.7mm
+	tw_UC310x118 = 11.9mm
+	r1_UC310x118 = 16.5mm
+	d1_UC310x118 = 277mm
+	Ag_UC310x118 = 15000mm^2
+	Ix_UC310x118 = 277.00*10^6*mm^4
+	Zx_UC310x118 = 1760.0*10^3*mm^3
+	Sx_UC310x118 = 1960.0*10^3*mm^3
+	rx_UC310x118 = 136.0mm
+	IyUC310x118 = 90.20*10^6*mm^4
+	Zy_UC310x118 = 588.0*10^3*mm^3
+	Sy_UC310x118 = 893.0*10^3*mm^3
+	ry_UC310x118 = 77.5mm
+	J_UC310x118 = 1630.0*10^3*mm^4
+	Iw_UC310x118 = 1980.0*10^9*mm^6
+	#show
+#end def
+ 
+#def UC310x97$
+	#hide
+	d_UC310x97 = 308mm
+	bf_UC310x97 = 305mm
+	tf_UC310x97 = 15.4mm
+	tw_UC310x97 = 9.9mm
+	r1_UC310x97 = 16.5mm
+	d1_UC310x97 = 277mm
+	Ag_UC310x97 = 12400mm^2
+	Ix_UC310x97 = 223.00*10^6*mm^4
+	Zx_UC310x97 = 1450.0*10^3*mm^3
+	Sx_UC310x97 = 1600.0*10^3*mm^3
+	rx_UC310x97 = 134.0mm
+	IyUC310x97 = 72.90*10^6*mm^4
+	Zy_UC310x97 = 478.0*10^3*mm^3
+	Sy_UC310x97 = 725.0*10^3*mm^3
+	ry_UC310x97 = 76.7mm
+	J_UC310x97 = 928.0*10^3*mm^4
+	Iw_UC310x97 = 1560.0*10^9*mm^6
+	#show
+#end def
+ 
+#def UC250x90$
+	#hide
+	d_UC250x90 = 260mm
+	bf_UC250x90 = 256mm
+	tf_UC250x90 = 17.3mm
+	tw_UC250x90 = 10.5mm
+	r1_UC250x90 = 14.0mm
+	d1_UC250x90 = 225mm
+	Ag_UC250x90 = 11400mm^2
+	Ix_UC250x90 = 143.00*10^6*mm^4
+	Zx_UC250x90 = 1100.0*10^3*mm^3
+	Sx_UC250x90 = 1230.0*10^3*mm^3
+	rx_UC250x90 = 112.0mm
+	IyUC250x90 = 48.40*10^6*mm^4
+	Zy_UC250x90 = 378.0*10^3*mm^3
+	Sy_UC250x90 = 575.0*10^3*mm^3
+	ry_UC250x90 = 65.2mm
+	J_UC250x90 = 1040.0*10^3*mm^4
+	Iw_UC250x90 = 713.0*10^9*mm^6
+	#show
+#end def
+ 
+#def UC250x73$
+	#hide
+	d_UC250x73 = 254mm
+	bf_UC250x73 = 254mm
+	tf_UC250x73 = 14.2mm
+	tw_UC250x73 = 8.6mm
+	r1_UC250x73 = 14.0mm
+	d1_UC250x73 = 225mm
+	Ag_UC250x73 = 9320mm^2
+	Ix_UC250x73 = 114.00*10^6*mm^4
+	Zx_UC250x73 = 897.0*10^3*mm^3
+	Sx_UC250x73 = 992.0*10^3*mm^3
+	rx_UC250x73 = 111.0mm
+	IyUC250x73 = 38.80*10^6*mm^4
+	Zy_UC250x73 = 306.0*10^3*mm^3
+	Sy_UC250x73 = 463.0*10^3*mm^3
+	ry_UC250x73 = 64.5mm
+	J_UC250x73 = 586.0*10^3*mm^4
+	Iw_UC250x73 = 557.0*10^9*mm^6
+	#show
+#end def
+ 
+#def UC200x60$
+	#hide
+	d_UC200x60 = 210mm
+	bf_UC200x60 = 205mm
+	tf_UC200x60 = 14.2mm
+	tw_UC200x60 = 9.3mm
+	r1_UC200x60 = 11.4mm
+	d1_UC200x60 = 181mm
+	Ag_UC200x60 = 7620mm^2
+	Ix_UC200x60 = 61.30*10^6*mm^4
+	Zx_UC200x60 = 584.0*10^3*mm^3
+	Sx_UC200x60 = 656.0*10^3*mm^3
+	rx_UC200x60 = 89.7mm
+	IyUC200x60 = 20.40*10^6*mm^4
+	Zy_UC200x60 = 199.0*10^3*mm^3
+	Sy_UC200x60 = 303.0*10^3*mm^3
+	ry_UC200x60 = 51.7mm
+	J_UC200x60 = 477.0*10^3*mm^4
+	Iw_UC200x60 = 195.0*10^9*mm^6
+	#show
+#end def
+ 
+#def UC200x52$
+	#hide
+	d_UC200x52 = 206mm
+	bf_UC200x52 = 204mm
+	tf_UC200x52 = 12.5mm
+	tw_UC200x52 = 8.0mm
+	r1_UC200x52 = 11.4mm
+	d1_UC200x52 = 181mm
+	Ag_UC200x52 = 6660mm^2
+	Ix_UC200x52 = 52.80*10^6*mm^4
+	Zx_UC200x52 = 512.0*10^3*mm^3
+	Sx_UC200x52 = 570.0*10^3*mm^3
+	rx_UC200x52 = 89.1mm
+	IyUC200x52 = 17.70*10^6*mm^4
+	Zy_UC200x52 = 174.0*10^3*mm^3
+	Sy_UC200x52 = 264.0*10^3*mm^3
+	ry_UC200x52 = 51.5mm
+	J_UC200x52 = 325.0*10^3*mm^4
+	Iw_UC200x52 = 166.0*10^9*mm^6
+	#show
+#end def
+ 
+#def UC200x46$
+	#hide
+	d_UC200x46 = 203mm
+	bf_UC200x46 = 203mm
+	tf_UC200x46 = 11.0mm
+	tw_UC200x46 = 7.3mm
+	r1_UC200x46 = 11.4mm
+	d1_UC200x46 = 181mm
+	Ag_UC200x46 = 5900mm^2
+	Ix_UC200x46 = 45.90*10^6*mm^4
+	Zx_UC200x46 = 451.0*10^3*mm^3
+	Sx_UC200x46 = 500.0*10^3*mm^3
+	rx_UC200x46 = 88.2mm
+	IyUC200x46 = 15.30*10^6*mm^4
+	Zy_UC200x46 = 151.0*10^3*mm^3
+	Sy_UC200x46 = 230.0*10^3*mm^3
+	ry_UC200x46 = 51.0mm
+	J_UC200x46 = 228.0*10^3*mm^4
+	Iw_UC200x46 = 142.0*10^9*mm^6
+	#show
+#end def
+ 
+#def UC150x37$
+	#hide
+	d_UC150x37 = 162mm
+	bf_UC150x37 = 154mm
+	tf_UC150x37 = 11.5mm
+	tw_UC150x37 = 8.1mm
+	r1_UC150x37 = 8.9mm
+	d1_UC150x37 = 139mm
+	Ag_UC150x37 = 4730mm^2
+	Ix_UC150x37 = 22.20*10^6*mm^4
+	Zx_UC150x37 = 274.0*10^3*mm^3
+	Sx_UC150x37 = 310.0*10^3*mm^3
+	rx_UC150x37 = 68.4mm
+	IyUC150x37 = 7.01*10^6*mm^4
+	Zy_UC150x37 = 91.0*10^3*mm^3
+	Sy_UC150x37 = 139.0*10^3*mm^3
+	ry_UC150x37 = 38.5mm
+	J_UC150x37 = 197.0*10^3*mm^4
+	Iw_UC150x37 = 39.6*10^9*mm^6
+	#show
+#end def
+ 
+#def UC150x30$
+	#hide
+	d_UC150x30 = 158mm
+	bf_UC150x30 = 153mm
+	tf_UC150x30 = 9.4mm
+	tw_UC150x30 = 6.6mm
+	r1_UC150x30 = 8.9mm
+	d1_UC150x30 = 139mm
+	Ag_UC150x30 = 3860mm^2
+	Ix_UC150x30 = 17.60*10^6*mm^4
+	Zx_UC150x30 = 223.0*10^3*mm^3
+	Sx_UC150x30 = 250.0*10^3*mm^3
+	rx_UC150x30 = 67.5mm
+	IyUC150x30 = 5.62*10^6*mm^4
+	Zy_UC150x30 = 73.4*10^3*mm^3
+	Sy_UC150x30 = 112.0*10^3*mm^3
+	ry_UC150x30 = 38.1mm
+	J_UC150x30 = 109.0*10^3*mm^4
+	Iw_UC150x30 = 30.8*10^9*mm^6
+	#show
+#end def
+ 
+#def UC150x23$
+	#hide
+	d_UC150x23 = 152mm
+	bf_UC150x23 = 152mm
+	tf_UC150x23 = 6.8mm
+	tw_UC150x23 = 6.1mm
+	r1_UC150x23 = 8.9mm
+	d1_UC150x23 = 139mm
+	Ag_UC150x23 = 2980mm^2
+	Ix_UC150x23 = 12.60*10^6*mm^4
+	Zx_UC150x23 = 166.0*10^3*mm^3
+	Sx_UC150x23 = 184.0*10^3*mm^3
+	rx_UC150x23 = 65.1mm
+	IyUC150x23 = 3.98*10^6*mm^4
+	Zy_UC150x23 = 52.4*10^3*mm^3
+	Sy_UC150x23 = 80.2*10^3*mm^3
+	ry_UC150x23 = 36.6mm
+	J_UC150x23 = 50.2*10^3*mm^4
+	Iw_UC150x23 = 21.1*10^9*mm^6
+	#show
+#end def
+ 
+#def UC100x15$
+	#hide
+	d_UC100x15 = 97mm
+	bf_UC100x15 = 99mm
+	tf_UC100x15 = 7.0mm
+	tw_UC100x15 = 5.0mm
+	r1_UC100x15 = 10.0mm
+	d1_UC100x15 = 83mm
+	Ag_UC100x15 = 1890mm^2
+	Ix_UC100x15 = 3.18*10^6*mm^4
+	Zx_UC100x15 = 65.6*10^3*mm^3
+	Sx_UC100x15 = 74.4*10^3*mm^3
+	rx_UC100x15 = 41.1mm
+	IyUC100x15 = 1.14*10^6*mm^4
+	Zy_UC100x15 = 22.9*10^3*mm^3
+	Sy_UC100x15 = 35.2*10^3*mm^3
+	ry_UC100x15 = 24.5mm
+	J_UC100x15 = 34.9*10^3*mm^4
+	Iw_UC100x15 = 2.3*10^9*mm^6
+	#show
+#end def
+#local
+#show
+'<h1> Testing </h1>
+UC310x158$
+I_y = Iy_UC310x158
+d_1 = d1_UC310x158
+d_UC310x158 - 2*tf_UC310x158
+I_y*d_1^2/4
+I_w = Iw_UC310x158|10^9*mm^6
+S_x = Sx_UC310x158|10^3*mm^3
+t_f = tf_UC310x158
+f_y = f_y300(tf_UC310x158)
+M_sx = f_y*S_x|kNm
+J = J_UC310x158|10^3*mm^4
+2*bf_UC310x158*tf_UC310x158^3/3 + d1_UC310x158*tw_UC310x158^3/3|10^3*mm^4
+L = 5m
+#nosub
+φM_sx = 0.9*M_sx(t_f; S_x)
+α_s,steel(t_f; S_x; E_s; G_s; I_y; J; I_w; L)
+φM_n = φM_n,steel(t_f; S_x; E_s; G_s; I_y; J; I_w; L)
+#varsub
+

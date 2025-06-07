@@ -1,0 +1,21 @@
+#global
+Eq(W; Cd) = Cd*W
+WH(W; H) = W*H
+ΣWH(W; H) = sum(WH(W; H))
+V_base(W; Cd) = sum(Eq(W; Cd))
+Ft(W; H; Cd) = join(0.08*V_base(W; Cd); vector(len(W) - 1)*kN)
+V_LVL(W; H; Cd) = Ft(W; H; Cd) + 0.92*V_base(W; Cd)*WH(W; H)/ΣWH(W; H)
+#def StoreyShear$(V_E$)
+#hide
+V_storey = vector(len(V_E$))
+#for i = 1 : len(V_E$)
+V_storey.i = sum(first(V_E$; i))
+#loop
+#show
+'Storey shear,'V_storey
+#end def
+#local
+W = [54kN; 129kN]
+H = [6.8m; 3.91m]
+Cd = 0.36
+V_LVL(W; H; Cd)

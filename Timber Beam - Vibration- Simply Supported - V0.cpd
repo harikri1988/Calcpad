@@ -1,0 +1,6 @@
+#post
+'Point load at mid-span, 'Q = 1kN
+'Span, 'L_b
+'Moment of inertia, 'I_xx = b*d^3/12|cm^4
+'Modulus of elasticity,'E_d
+'Deflection under point load:'δ_vib = Q*L_b^3/(48*E_d*I_xx)|mm

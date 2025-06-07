@@ -1,0 +1,9 @@
+#post
+'Service level load on the element, 'w_s,b
+'Span of the element, 'L_b
+'Moment of inertia, 'I_xx = b*d^3/12|cm^4
+'Modulus of elasticity for deflection calculation:'
+E_d = if(E_case ≡ 1; E_t; if(E_case ≡ 2; E_lbt; (E_t + E_lbt)/2))'<span style = "color:gray;"><i>-----[Sec.2.4.2.3]</i></Span>
+'Deflection of beam,'δ_Overall = 5/384*w_s,b*L_b^4/(E_d*I_xx)|mm
+L_b/δ_Overall
+#show

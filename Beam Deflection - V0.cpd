@@ -1,0 +1,57 @@
+#hide
+'Simply Supported Beam Analysis
+Reaction_B_UDLs(w; L; x_1; x_2) = sum(w*(x_2 - x_1)*(x_2 + x_1)/2/L)
+Reaction_A_UDLs(w; L; x_1; x_2) = sum(w*(x_2 - x_1)) - Reaction_B_UDLs(w; L; x_1; x_2)
+
+Reaction_B_Ps(P; L; a) = sum(P*a/L)
+Reaction_A_Ps(P; L; a) = sum(P) - Reaction_B_Ps(P; L; a)
+
+
+δ_ss,UDL(w; L; E; I; x) = (w*x/(24*E*I))*(L^3 - 2*L*x^2 + x^3)|mm
+δ_ss,P(P; L; E; I; x; a) = if(x ≤ a; (P*(L - a)*x/(6*L*E*I))*(L^2 - x^2 - (L - a)^2); (P*(L - a)/(6*L*E*I)*((L/(L - a))*(x - a)^3 + (L^2 - (L - a)^2)*x - x^3)))|mm
+δ_ss,UVL_increasing(w_0; L; E; I; x) = (w_0*x/(360*L*E*I))*(7*L^4 - 10*L^2*x^2 + 3*x^4)
+δ_ss,UVL_decreasing(w_0; L; E; I; x) = δ_ss,UVL_increasing(w_0; L; E; I; L - x)
+δ_ss,UVL(w_Start; w_End; L; E; I; x) = δ_ss,UDL(w_Start; L; E; I; x) + δ_ss,UVL_increasing(w_End - w_Start; L; E; I; x)
+#hide
+
+
+
+
+
+#show
+#local
+I = ? {5.66}*10^6*mm^4
+E_s = 205GPa
+w = ? {0.371}kN/m
+P = ? {4.652}kN
+L = ? {5}m
+a = ? {3.7}m
+
+$Plot{δ_ss,UDL(w; L; E_s; I; x) @ x = 0m : L}
+$Plot{δ_ss,P(P; L; E_s; I; x; a) @ x = 0m : L}
+(5/384)*((w*L^4)/(E_s*I))|mm
+
+$Plot{δ_ss,UDL(w; L; E_s; I; x) + δ_ss,P(P; L; E_s; I; x; a) @ x = 0m : L}
+
+x = a
+δ_ss,UDL(w; L; E_s; I; x) + δ_ss,P(P; L; E_s; I; x; a)|mm
+
+
+
+w = [1; 2; 3]*kN/m
+L = 6m
+x_1 = [0; 0.5; 0.75]*L
+x_2 = [1; 0.75; 1]*L
+
+Reaction_B_UDLs(w; L; x_1; x_2)
+Reaction_A_UDLs(w; L; x_1; x_2)
+
+P = [1; 2; 3]*kN
+a = [0.25; 0.5; 0.75]*L
+
+Reaction_A_Ps(P; L; a)
+Reaction_B_Ps(P; L; a)
+
+
+
+#global
